@@ -1,21 +1,41 @@
-import { StyleSheet, Button } from 'react-native';
+import { StyleSheet, Button, TextInput, Alert } from 'react-native';
 import { Link, useRouter } from 'expo-router';
+import { useState } from 'react';
 
 import EditScreenInfo from '../components/EditScreenInfo';
-import { Text, View } from '../components/Themed';
-import WordList from '../components/WordList';
+import { Text, View, SafeAreaView } from '../components/Themed';
+import MenuButton from '../components/MenuButton'
 
 //change to menu button to pass in host true/false
 export default function IndexScreen() {
   const router = useRouter();
+  const [name, onChangeText] = useState('');
+  const [isHost, setIsHost] = useState('false');
   const testWords = ['hello', 'hi', 'how', 'are', 'you', '?', 'games', 'are', 'fun', '!'];
+
+  const handlePress = (room, host) => {
+    if (name === '') {
+      Alert.alert('Add Name', 'Please add your name', [{
+        text: 'OK',
+        onPress: () => {},
+      }]);
+    } else {
+      if (host) {
+        setIsHost(true);
+      }
+      router.push(room);
+    }
+  };
+
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Text style={styles.title}>Ransom Notes!</Text>
-      <WordList words={testWords}/>
-      <Button onPress={() => router.push("/waitingRoom")} title="Go to Game" />
+      <TextInput style={styles.input} value={name} onChangeText={(text) => onChangeText(text)} placeholder="add your name..." />
+      <MenuButton handlePress={() => handlePress("/waitingRoom", true)} title="Create a New Game" />
+      <MenuButton handlePress={() => handlePress("/waitingRoom")} title="Join an Existing Game" />
+      <MenuButton handlePress={() => handlePress("/rules")} title="Rules" />
       <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-    </View>
+    </SafeAreaView>
   );
 }
 
@@ -39,4 +59,11 @@ const styles = StyleSheet.create({
     height: 1,
     width: '80%',
   },
+  input: {
+    height: 40,
+    margin: 30,
+    padding: 10,
+    borderWidth: 2,
+    backgroundColor: 'white',
+  }
 });
