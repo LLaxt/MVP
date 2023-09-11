@@ -3,21 +3,23 @@ import { Link, useRouter } from 'expo-router';
 
 import EditScreenInfo from '../components/EditScreenInfo';
 import { Text, View } from '../components/Themed';
-import WordMagnet from '../components/WordMagnet';
+import WordList from '../components/WordList';
 
 //change to menu button to pass in host true/false
 export default function IndexScreen() {
   const router = useRouter();
+  const testWords = ['hello', 'hi', 'how', 'are', 'you', '?', 'games', 'are', 'fun', '!'];
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Ransom Notes!</Text>
-      <WordMagnet word={'test'}/>
+      <WordList words={testWords}/>
       <Button onPress={() => router.push("/waitingRoom")} title="Go to Game" />
       <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
     </View>
   );
 }
 
+// how navigation works:
 // app/game/index.jsx -> /game
 // app/game/start.jsx -> "URL" = /game/start
 // app/(tabs)/start.jsx -> /start

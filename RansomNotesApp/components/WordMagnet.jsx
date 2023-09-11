@@ -36,7 +36,11 @@ const styles = StyleSheet.create({
     alignSelf: 'flexStart',
     position: 'relative',
     display: 'block',
-    shadowColor: 'black',
-    shadowOffset: 1,
+    // shadowColor: 'black',
+    // shadowOffset: 10,
+    // elevation: {
+    //   elevation: 20,
+    //   shadowColor: 'black',
+    // }
   }
 });
