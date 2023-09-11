@@ -1,21 +1,25 @@
-import { StatusBar } from 'expo-status-bar';
-import { Platform, StyleSheet } from 'react-native';
+import { StyleSheet, Button } from 'react-native';
+import { Link, useRouter } from 'expo-router';
 
 import EditScreenInfo from '../components/EditScreenInfo';
 import { Text, View } from '../components/Themed';
 
-export default function ModalScreen() {
+export default function IndexScreen() {
+  const router = useRouter();
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Modal</Text>
+      <Text style={styles.title}>Tab One</Text>
+      <Text>Go to the <Link href="/game">game screen</Link></Text>
+      <Button onPress={() => router.push("/game")} title="Go to Game" />
       <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <EditScreenInfo path="app/modal.tsx" />
-
-      {/* Use a light status bar on iOS to account for the black space above the modal */}
-      <StatusBar style={Platform.OS === 'ios' ? 'light' : 'auto'} />
+      <EditScreenInfo path="app/index.tsx" />
     </View>
   );
 }
+
+// app/game/index.jsx -> /game
+// app/game/start.jsx -> "URL" = /game/start
+// app/(tabs)/start.jsx -> /start
 
 const styles = StyleSheet.create({
   container: {
