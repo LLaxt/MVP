@@ -3,16 +3,17 @@ import { Link, useRouter } from 'expo-router';
 
 import EditScreenInfo from '../components/EditScreenInfo';
 import { Text, View } from '../components/Themed';
+import WordMagnet from '../components/WordMagnet';
 
+//change to menu button to pass in host true/false
 export default function IndexScreen() {
   const router = useRouter();
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Tab One</Text>
-      <Text>Go to the <Link href="/game">game screen</Link></Text>
-      <Button onPress={() => router.push("/game")} title="Go to Game" />
+      <Text style={styles.title}>Ransom Notes!</Text>
+      <WordMagnet word={'test'}/>
+      <Button onPress={() => router.push("/waitingRoom")} title="Go to Game" />
       <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <EditScreenInfo path="app/index.tsx" />
     </View>
   );
 }
