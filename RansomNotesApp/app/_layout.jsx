@@ -47,7 +47,7 @@ function RootLayoutNav() {
         <Stack.Screen name="waitingRoom" options={{ headerShown: false }} />
         <Stack.Screen name="rules" options={{ headerShown: false }} />
         <Stack.Screen name="writeAnswer" options={{ headerShown: false }} />
-        <Stack.Screen name="viewWinner" options={{ headerShown: false }} />
+        <Stack.Screen name="viewAnswers" options={{ headerShown: false }} />
         {/* <Stack.Screen name="turnWinner" options={{ headerShown: false }} />
         <Stack.Screen name="finalWinner" options={{ headerShown: false }} /> */}
       </Stack>

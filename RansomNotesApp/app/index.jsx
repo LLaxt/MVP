@@ -4,6 +4,7 @@ import { useState } from 'react';
 
 import EditScreenInfo from '../components/EditScreenInfo';
 import { Text, View, SafeAreaView } from '../components/Themed';
+import Title from '../components/Title';
 import MenuButton from '../components/MenuButton'
 
 //change to menu button to pass in host true/false
@@ -28,7 +29,7 @@ export default function IndexScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.title}>Ransom Notes!</Text>
+      <Title text='Ransom Notes!'/>
       <TextInput style={styles.input} value={name} onChangeText={(text) => onChangeText(text)} placeholder="add your name..." />
       <MenuButton handlePress={() => handlePress('/waitingRoom', true)} title="Create a New Game" />
       <MenuButton handlePress={() => handlePress('/waitingRoom')} title="Join an Existing Game" />
@@ -47,10 +48,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
   },
   input: {
     height: 40,

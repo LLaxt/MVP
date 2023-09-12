@@ -4,7 +4,7 @@ import WordMagnet from './WordMagnet';
 
 export default function WordList({ words }) {
 
-  const wordList = words.map((word, index) => <View style={styles.wordContainer}><WordMagnet word={word} key={index} /></View>);
+  const wordList = words.map((word, index) => <View style={styles.wordContainer} key={index}><WordMagnet word={word} /></View>);
 
   return (
     <View style={styles.container}>
@@ -21,10 +21,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     margin: 15,
-    backgroundColor: 'lightblue',
     paddingRight: 13,
   },
   wordContainer: {
-    padding: 25,
+    padding: 22,
   }
 });

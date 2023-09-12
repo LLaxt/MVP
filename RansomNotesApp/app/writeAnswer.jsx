@@ -1,44 +1,54 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, ScrollView, Platform } from 'react-native';
 import { Link, useRouter } from 'expo-router';
 import { Text, View, SafeAreaView } from '../components/Themed';
-import PlayCard from '../components/PlayCard';
+import Title from '../components/Title';
 import WordList from '../components/WordList';
 import GameButton from '../components/GameButton';
 
+
 export default function IndexScreen() {
   const router = useRouter();
+
   const testPrompt = 'Alert someone that you are slowly sinking in quicksand'
-  const testWords = ['hello', 'hi', 'how', 'are', 'you', '?', 'games', 'are', 'fun', '!', 'hello', 'hi', 'how', 'are', 'you', '?', 'games', 'are', 'fun', '!', 'Alphabetical', 'here', 'are', 'some', 'enormously', 'looooooong', 'words', 'woooooooooords', 'hello', 'hi', 'how', 'are', 'you', '?', 'games', 'are', 'fun', '!', 'hello', 'hi', 'how', 'are', 'you', '?', 'games', 'are', 'fun', '!', 'Alphabetical', 'here', 'are', 'some', 'enormously', 'looooooong', 'weird', 'woooooooooords'];
+  const testWords = ['hello', 'hi', 'how', 'are', 'you', '?', 'games', 'are', 'fun', '!', 'hello', 'hi', 'how', 'are', 'you', '?', 'games', 'are', 'fun', '!', 'Alphabetical', 'here', 'are', 'some', 'enormously', 'looooooong', 'words', 'more', 'hello', 'hi', 'how', 'are', 'you', '?', 'games', 'are', 'fun', '!', 'hello', 'hi', 'how', 'are', 'you', '?', 'games', 'are', 'fun', '!', 'Alphabetical', 'here', 'are', 'some', 'enormously', 'looooooong', 'weird', 'testing', 'hello', 'additional', 'another', 'every'];
+
+
+  // const submitCard = async () => {
+  // logic for submitting words within play card
+  //   router.push('/viewAnswers');
+  // };
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.title}>Prompt:</Text>
+      <Title text='Prompt:' />
       <Text style={styles.text}>{ testPrompt }</Text>
-      <PlayCard/>
+      <View style={styles.playCard} />
       <WordList words={testWords} />
       <View style={styles.footer}>
         <GameButton handlePress={() => {}} title='0:45' />
         <GameButton handlePress={() => router.push('/viewAnswers')} title='Submit Response' />
-        <GameButton handlePress={() => {}} title='Recycle Words' />
+        <GameButton handlePress={() => {}} title='Swap' />
+        <GameButton handlePress={() => router.push('/')} title='Main Menu' />
       </View>
     </SafeAreaView>
   );
 }
-//add footer with timer, submit button, and refresh letters
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    //alignItems: 'center',
     justifyContent: 'center',
-  },
-  title: {
-    fontSize: 14,
-    fontWeight: 'bold',
-    textAlign: 'center',
   },
   text: {
     textAlign: 'center',
+  },
+  playCard: {
+    height: 180,
+    backgroundColor: 'black',
+    margin: 30,
+    marginTop: 10,
+    marginBottom: 10,
+    borderRadius: 10,
   },
   footer: {
     position: 'fixed',

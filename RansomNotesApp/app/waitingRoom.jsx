@@ -4,6 +4,7 @@ import { useState } from 'react';
 
 import EditScreenInfo from '../components/EditScreenInfo';
 import { Text, View, SafeAreaView } from '../components/Themed';
+import Title from '../components/Title';
 import MenuButton from '../components/MenuButton';
 import MagnetText from '../components/MagnetText';
 
@@ -19,7 +20,7 @@ export default function WaitingRoom() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.title}>Waiting for all players to join...</Text>
+      <Title text='Waiting for all players to join...' />
       { playerList }
       <MenuButton handlePress={() => router.push('/writeAnswer')} title="Start" />
     </SafeAreaView>
@@ -31,9 +32,5 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
   },
 });

@@ -30,6 +30,7 @@ yarn-error.*
 
 # local env files
 .env*.local
+.env
 
 # typescript
 *.tsbuildinfo
@@ -43,3 +44,4 @@ expo-env.d.ts
 # game assets
 /gameAssets/prompts.txt
 /gameAssets/words.txt
+/testImages
