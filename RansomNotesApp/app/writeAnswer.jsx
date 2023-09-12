@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
 import { Link, useRouter } from 'expo-router';
-import { Text, View } from '../components/Themed';
+import { Text, View, SafeAreaView } from '../components/Themed';
 import PlayCard from '../components/PlayCard';
 import WordList from '../components/WordList';
 import GameButton from '../components/GameButton';
@@ -11,7 +11,7 @@ export default function IndexScreen() {
   const testWords = ['hello', 'hi', 'how', 'are', 'you', '?', 'games', 'are', 'fun', '!', 'hello', 'hi', 'how', 'are', 'you', '?', 'games', 'are', 'fun', '!', 'Alphabetical', 'here', 'are', 'some', 'enormously', 'looooooong', 'words', 'woooooooooords', 'hello', 'hi', 'how', 'are', 'you', '?', 'games', 'are', 'fun', '!', 'hello', 'hi', 'how', 'are', 'you', '?', 'games', 'are', 'fun', '!', 'Alphabetical', 'here', 'are', 'some', 'enormously', 'looooooong', 'weird', 'woooooooooords'];
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Text style={styles.title}>Prompt:</Text>
       <Text style={styles.text}>{ testPrompt }</Text>
       <PlayCard/>
@@ -21,7 +21,7 @@ export default function IndexScreen() {
         <GameButton handlePress={() => router.push('/viewAnswers')} title='Submit Response' />
         <GameButton handlePress={() => {}} title='Recycle Words' />
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 //add footer with timer, submit button, and refresh letters

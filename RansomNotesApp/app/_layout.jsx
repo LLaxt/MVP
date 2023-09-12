@@ -44,7 +44,12 @@ function RootLayoutNav() {
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <Stack>
         <Stack.Screen name="index" options={{ headerShown: false }} />
-        {/* <Stack.Screen name="game" options={{ headerShown: false }} /> */}
+        <Stack.Screen name="waitingRoom" options={{ headerShown: false }} />
+        <Stack.Screen name="rules" options={{ headerShown: false }} />
+        <Stack.Screen name="writeAnswer" options={{ headerShown: false }} />
+        <Stack.Screen name="viewWinner" options={{ headerShown: false }} />
+        {/* <Stack.Screen name="turnWinner" options={{ headerShown: false }} />
+        <Stack.Screen name="finalWinner" options={{ headerShown: false }} /> */}
       </Stack>
     </ThemeProvider>
   );
