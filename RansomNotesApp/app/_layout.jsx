@@ -13,9 +13,10 @@ export {
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
-export default function RootLayout() {
+export default function RootLayout () {
   const [loaded, error] = useFonts({
     CourierPrime: require('../assets/fonts/CourierPrime-Regular.ttf'),
+    CourierPrimeBold: require('../assets/fonts/CourierPrime-Bold.ttf'),
     ...FontAwesome.font,
   });
 

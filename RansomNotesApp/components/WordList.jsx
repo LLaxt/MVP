@@ -1,6 +1,8 @@
 import React from 'react';
-import { View, Text, ScrollView, StyleSheet } from 'react-native';
+import { ScrollView, StyleSheet } from 'react-native';
 import WordMagnet from './WordMagnet';
+import { Text, View, SafeAreaView } from '../components/Themed';
+import Draggable from 'react-native-draggable';
 
 export default function WordList({ words }) {
 
@@ -22,8 +24,10 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     margin: 15,
     paddingRight: 13,
+    backgroundColor: 'transparent',
   },
   wordContainer: {
     padding: 22,
+    backgroundColor: 'transparent',
   }
 });

@@ -28,19 +28,19 @@ export function Text(props: TextProps) {
   //removing darkmode for now
   //const color = useThemeColor({ light: lightColor, dark: darkColor }, 'text');
   const color = useThemeColor({ light: lightColor }, 'text');
-  return <DefaultText style={[{ color }, style]} {...otherProps} />;
+  return <DefaultText style={[{ color, fontFamily: "CourierPrime", fontSize: 16, }, style]} {...otherProps} />;
 }
 
 export function View(props: ViewProps) {
   const { style, lightColor, darkColor, ...otherProps } = props;
   //const backgroundColor = useThemeColor({ light: lightColor, dark: darkColor }, 'background');
   const backgroundColor = useThemeColor({ light: lightColor }, 'background');
-  return <DefaultView style={[{ backgroundColor }, style]} {...otherProps} />;
+  return <DefaultView style={[{ backgroundColor, fontFamily: "CourierPrime" }, style]} {...otherProps} />;
 }
 
 export function SafeAreaView(props: SafeAreaViewProps) {
   const { style, lightColor, darkColor, ...otherProps } = props;
   //const backgroundColor = useThemeColor({ light: lightColor, dark: darkColor }, 'background');
   const backgroundColor = useThemeColor({ light: lightColor}, 'background');
-  return <DefaultSafeAreaView style={[{ backgroundColor }, style]} {...otherProps} />;
+  return <DefaultSafeAreaView style={[{ backgroundColor, fontFamily: "CourierPrime" }, style]} {...otherProps} />;
 }

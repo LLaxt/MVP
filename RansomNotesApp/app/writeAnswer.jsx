@@ -20,8 +20,7 @@ export default function IndexScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Title text='Prompt:' />
-      <Text style={styles.text}>{ testPrompt }</Text>
+      <Text style={styles.text}>{ 'Prompt: ' + testPrompt }</Text>
       <View style={styles.playCard} />
       <WordList words={testWords} />
       <View style={styles.footer}>

@@ -1,6 +1,7 @@
 import React from 'react';
-import { View, Text, StyleSheet, Dimensions } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
 import Draggable from 'react-native-draggable';
+import { Text, View, SafeAreaView } from '../components/Themed';
 
 export default function FrozenWordMagnet({word, x, y}) {
   const randRotation = (Math.random() * 4) * (Math.random() < 0.5 ? -1 : 1);

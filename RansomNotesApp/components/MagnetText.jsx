@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
+import { Text, View, SafeAreaView } from '../components/Themed';
 
 export default function MagnetText({ text, extraStyles = {} }) {
   const randRotation = (Math.random() * 3) * (Math.random() < 0.5 ? -1 : 1);

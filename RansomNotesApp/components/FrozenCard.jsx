@@ -1,6 +1,8 @@
 import React from 'react';
-import { View, Text, StyleSheet, Dimensions } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
 import FrozenWordMagnet from './FrozenWordMagnet';
+import { Text, View, SafeAreaView } from '../components/Themed';
+
 
 
 export default function FrozenCard({ staticWords }) {

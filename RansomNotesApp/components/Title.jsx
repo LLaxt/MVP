@@ -12,8 +12,9 @@ export default function Title({ text }) {
 const styles = StyleSheet.create({
   title: {
     fontSize: 20,
-    fontWeight: 'bold',
+    fontFamily: 'CourierPrimeBold',
     textAlign: 'center',
-    paddingTop: Platform.OS === 'ios' ? 0 : 40,
+    paddingTop: Platform.OS === 'ios' ? 10 : 40,
+    paddingBottom: 5,
   },
 });

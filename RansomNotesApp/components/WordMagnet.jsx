@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, Text, StyleSheet, Dimensions } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
+import { Text, View, SafeAreaView } from '../components/Themed';
 import Draggable from 'react-native-draggable';
 
 export default function WordMagnet({word}) {
@@ -13,7 +14,7 @@ export default function WordMagnet({word}) {
 
   //look into gestureState, x0/y0 coordinates, and onDragRelease
   return (
-    <Draggable
+    <Draggable style={styles.draggable}
     // x={100}
     // y={100}
     // minX={-5}
@@ -42,5 +43,8 @@ const styles = StyleSheet.create({
     //   elevation: 20,
     //   shadowColor: 'black',
     // }
+  },
+  draggable: {
+    backgroundColor: 'transparent',
   }
 });

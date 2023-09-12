@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, Text, StyleSheet, Pressable } from 'react-native';
+import { StyleSheet, Pressable } from 'react-native';
+import { Text, View, SafeAreaView } from '../components/Themed';
 
 export default function GameButton({title, handlePress}) {
   return (
