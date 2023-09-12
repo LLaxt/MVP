@@ -11,7 +11,6 @@ export default function IndexScreen() {
   const router = useRouter();
   const [name, onChangeText] = useState('');
   const [isHost, setIsHost] = useState('false');
-  const testWords = ['hello', 'hi', 'how', 'are', 'you', '?', 'games', 'are', 'fun', '!'];
 
   const handlePress = (room, host) => {
     if (name === '') {
@@ -58,6 +57,6 @@ const styles = StyleSheet.create({
     margin: 30,
     padding: 10,
     borderWidth: 2,
-    backgroundColor: 'white',
+    backgroundColor: '#ffe7bf',
   }
 });

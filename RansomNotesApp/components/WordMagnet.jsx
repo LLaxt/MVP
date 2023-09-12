@@ -14,12 +14,12 @@ export default function WordMagnet({word}) {
   //look into gestureState, x0/y0 coordinates, and onDragRelease
   return (
     <Draggable
-    x={100}
-    y={100}
-      // minX={-5}
-      // minY={-230}
-      // maxY={windHeight / 2 + 30}
-      // maxX={windWidth - 25}
+    // x={100}
+    // y={100}
+    // minX={-5}
+    // minY={-230}
+    // maxY={windHeight / 2 + 30}
+    // maxX={windWidth - 25}
     >
       <View style={[styles.magnet, { transform: [{ rotate: `${randRotation}deg`}]}]} >
         <Text>{ word }</Text>
@@ -35,10 +35,10 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     alignSelf: 'flexStart',
     position: 'relative',
-    display: 'block',
+    display: 'inline-block',
     // shadowColor: 'black',
     // shadowOffset: 10,
-    // elevation: {
+    // elevation:
     //   elevation: 20,
     //   shadowColor: 'black',
     // }
