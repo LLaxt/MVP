@@ -31,10 +31,9 @@ export default function IndexScreen() {
     <SafeAreaView style={styles.container}>
       <Text style={styles.title}>Ransom Notes!</Text>
       <TextInput style={styles.input} value={name} onChangeText={(text) => onChangeText(text)} placeholder="add your name..." />
-      <MenuButton handlePress={() => handlePress("/waitingRoom", true)} title="Create a New Game" />
-      <MenuButton handlePress={() => handlePress("/waitingRoom")} title="Join an Existing Game" />
-      <MenuButton handlePress={() => handlePress("/rules")} title="Rules" />
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
+      <MenuButton handlePress={() => handlePress('/waitingRoom', true)} title="Create a New Game" />
+      <MenuButton handlePress={() => handlePress('/waitingRoom')} title="Join an Existing Game" />
+      <MenuButton handlePress={() => router.push('/rules')} title="Rules" />
     </SafeAreaView>
   );
 }
@@ -53,11 +52,6 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: 'bold',
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
   },
   input: {
     height: 40,
