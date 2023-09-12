@@ -13,7 +13,7 @@ export default function WaitingRoom() {
   const router = useRouter();
   const [name, onChangeText] = useState('');
   const [isHost, setIsHost] = useState('false');
-  const testPlayers = ['Lauren', 'Tom', 'Kevin', 'Rachel', 'Matthew', 'Julien'];
+  const testPlayers = ['Lauren', 'Nat', 'Kevin', 'Rachel', 'Matthew', 'Julien'];
   const playerColors = ['#ff9b94', '#ffda94', '#dfff94', '#94efff', '#949fff', '#e894ff'];
 
   const playerList = testPlayers.map((player, index) => <MagnetText text={player} key={index} extraStyles={{ backgroundColor: playerColors[index] }}/>);

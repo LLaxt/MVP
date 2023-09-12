@@ -20,5 +20,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     margin: 20,
     padding: 10,
+    shadowColor: 'black',
   },
 });

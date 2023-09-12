@@ -4,7 +4,6 @@ import { Link, useRouter } from 'expo-router';
 import { Text, View, SafeAreaView } from '../components/Themed';
 import GameButton from '../components/GameButton';
 import FrozenCard from '../components/FrozenCard';
-import Title from '../components/Title';
 
 export default function viewAnswers() {
   const router = useRouter();
@@ -21,41 +20,40 @@ export default function viewAnswers() {
     {
       player: 2,
       words: [
-        { word: 'hi', x: 10, y: 20 },
-        { word: 'hi', x: 20, y: 30 },
-        { word: 'hi', x: 30, y: 90 },
-        { word: 'hi', x: 70, y: 20 },
+        { word: 'a', x: 65, y: 55 },
+        { word: 'funny', x: 100, y: 55 },
+        { word: 'answer', x: 170, y: 70 },
+        { word: '!', x: 250, y: 100 },
       ]},
     {
       player: 3,
       words: [
-        { word: 'ok', x: 10, y: 20 },
-        { word: 'ok', x: 20, y: 20 },
-        { word: 'ok', x: 30, y: 20 },
-        { word: 'ok', x: 40, y: 20 },
+        { word: 'another', x: 20, y: 35 },
+        { word: 'funny', x: 100, y: 65 },
+        { word: 'answer', x: 170, y: 70 },
+        { word: '!', x: 250, y: 100 },
       ]},
       {
         player: 4,
         words: [
-          { word: 'neat', x: 10, y: 20 },
-          { word: 'neat', x: 20, y: 20 },
-          { word: 'neat', x: 30, y: 20 },
-          { word: 'neat', x: 40, y: 20 },
+          { word: 'a', x: 65, y: 55 },
+          { word: 'funny', x: 100, y: 55 },
+          { word: 'answer', x: 170, y: 70 },
+          { word: '!', x: 250, y: 100 },
       ]},
       {
         player: 5,
         words: [
-          { word: 'cool', x: 10, y: 20 },
-          { word: 'cool', x: 20, y: 20 },
-          { word: 'cool', x: 30, y: 20 },
-          { word: 'cool', x: 40, y: 20 },
+          { word: 'a', x: 65, y: 55 },
+          { word: 'funny', x: 100, y: 55 },
+          { word: 'answer', x: 170, y: 70 },
+          { word: '!', x: 250, y: 100 },
         ]}];
 
   const finalCards = testFinalAnswers.map((card, index) => <FrozenCard staticWords={card} key={index}/> );
 
   return (
     <SafeAreaView style={styles.container}>
-      <Title text='Prompt:' />
       <Text style={styles.text}>{ testPrompt }</Text>
       <ScrollView style={styles.scroll}>
         {finalCards}

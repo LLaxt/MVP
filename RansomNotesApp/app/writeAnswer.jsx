@@ -20,8 +20,8 @@ export default function IndexScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.text}>{ 'Prompt: ' + testPrompt }</Text>
-      <View style={styles.playCard} />
+      <Text style={styles.text}>{ testPrompt }</Text>
+      <View style={styles.shadow}><View style={styles.playCard} /></View>
       <WordList words={testWords} />
       <View style={styles.footer}>
         <GameButton handlePress={() => {}} title='0:45' />
@@ -40,8 +40,21 @@ const styles = StyleSheet.create({
   },
   text: {
     textAlign: 'center',
+    marginTop: 10,
+    fontSize: 18,
   },
   playCard: {
+    flex: 1,
+    backgroundColor: 'black',
+    margin: 5,
+    marginTop: 5,
+    borderRadius: 10,
+    shadowColor: 'white',
+    shadowRadius: 5,
+    shadowOpacity: 1,
+    elevation: 6,
+  },
+  shadow: {
     height: 180,
     backgroundColor: 'black',
     margin: 30,

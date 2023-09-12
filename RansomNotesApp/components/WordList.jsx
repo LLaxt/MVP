@@ -23,8 +23,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     margin: 15,
+    marginTop: 5,
     paddingRight: 13,
-    backgroundColor: 'transparent',
+    backgroundColor: 'blue',
   },
   wordContainer: {
     padding: 22,
