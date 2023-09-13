@@ -10,7 +10,7 @@ export default function viewAnswers() {
   const router = useRouter();
   const [voting, setVoting] = useState(false);
   const [vote, setVote] = useState(0);
-  const testPrompt = 'Alert someone that you are slowly sinking in quicksand';0
+  const testPrompt = 'Alert someone that you are slowly sinking in quicksand';
 
   const testFinalAnswers = [
     {player: 1,
@@ -62,12 +62,13 @@ export default function viewAnswers() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.text}>{ testPrompt }</Text>
+      <Text style={styles.prompt}>{ testPrompt }</Text>
       <ScrollView style={styles.scroll}>
         {finalCards}
       </ScrollView>
       <View style={styles.footer}>
         <GameButton handlePress={() => setVoting(!voting)} title={voting ? 'Click your favorite answer!' : 'Ready to Vote?'} />
+        <Text style={styles.text}>Don't forget to screenshot your favorites!</Text>
       </View>
     </SafeAreaView>
   );
@@ -79,8 +80,15 @@ const styles = StyleSheet.create({
     //alignItems: 'center',
     justifyContent: 'center',
   },
+  prompt: {
+    textAlign: 'center',
+    fontSize: 18,
+  },
   text: {
     textAlign: 'center',
+    fontSize: 14,
+    padding: 5,
+    flexWrap: 'wrap',
   },
   playCard: {
     height: 180,
@@ -96,10 +104,9 @@ const styles = StyleSheet.create({
   footer: {
     position: 'fixed',
     bottom: 0,
-    flex: .05,
+    flex: .08,
     justifyContent: 'center',
     alignItems: 'center',
     padding: 10,
-    flexDirection: 'row',
   }
 });

@@ -92,6 +92,7 @@ const styles = StyleSheet.create({
   },
   shadow: {
     height: 180,
+    width: 333,
     backgroundColor: 'black',
     margin: 30,
     marginTop: 10,

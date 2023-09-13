@@ -5,7 +5,7 @@ import { Text, View, SafeAreaView } from '../components/Themed';
 
 
 
-export default function FrozenCard({ staticWords, handleClick }) {
+export default function FrozenCard({ staticWords, handleClick = () => {} }) {
   const wordList = [];
   for (let key in staticWords.words) {
     wordList.push(
@@ -43,6 +43,7 @@ const styles = StyleSheet.create({
   },
   shadow: {
     height: 180,
+    width: 333,
     backgroundColor: 'black',
     margin: 30,
     marginTop: 10,
