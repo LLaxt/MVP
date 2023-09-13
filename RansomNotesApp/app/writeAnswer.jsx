@@ -1,4 +1,5 @@
 import { StyleSheet, ScrollView, Platform } from 'react-native';
+import { useState } from 'react';
 import { Link, useRouter } from 'expo-router';
 import { Text, View, SafeAreaView } from '../components/Themed';
 import Title from '../components/Title';
@@ -8,6 +9,7 @@ import GameButton from '../components/GameButton';
 
 export default function IndexScreen() {
   const router = useRouter();
+  const [time, setTime] = useState(60);
 
   const testPrompt = 'Alert someone that you are slowly sinking in quicksand'
   const testWords = ['hello', 'hi', 'how', 'are', 'you', '?', 'games', 'are', 'fun', '!', 'hello', 'hi', 'how', 'are', 'you', '?', 'games', 'are', 'fun', '!', 'Alphabetical', 'here', 'are', 'some', 'enormously', 'looooooong', 'words', 'more', 'hello', 'hi', 'how', 'are', 'you', '?', 'games', 'are', 'fun', '!', 'hello', 'hi', 'how', 'are', 'you', '?', 'games', 'are', 'fun', '!', 'Alphabetical', 'here', 'are', 'some', 'enormously', 'looooooong', 'weird', 'testing', 'hello', 'additional', 'another', 'every'];
@@ -24,7 +26,7 @@ export default function IndexScreen() {
       <View style={styles.shadow}><View style={styles.playCard} /></View>
       <WordList words={testWords} />
       <View style={styles.footer}>
-        <GameButton handlePress={() => {}} title='0:45' />
+        <GameButton handlePress={() => {}} title={':' + time} />
         <GameButton handlePress={() => router.push('/viewAnswers')} title='Submit Response' />
         <GameButton handlePress={() => {}} title='Swap' />
         <GameButton handlePress={() => router.push('/')} title='Main Menu' />
