@@ -21,8 +21,10 @@ export default function WaitingRoom() {
   return (
     <SafeAreaView style={styles.container}>
       <Title text='Waiting for all players to join...' />
+      <Text style={styles.roomcode}>ROOM CODE: ABC123</Text>
       { playerList }
       <MenuButton handlePress={() => router.push('/writeAnswer')} title="      Start      " />
+      <Text style={styles.instructions}>Drag word magnets fully inside the black play card area to be included in your response!</Text>
     </SafeAreaView>
   );
 }
@@ -32,5 +34,13 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  roomcode: {
+    fontSize: 20,
+    padding: 20,
+  },
+  instructions: {
+    textAlign: 'center',
+    padding: 20,
   },
 });

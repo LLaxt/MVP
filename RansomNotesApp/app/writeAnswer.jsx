@@ -27,7 +27,7 @@ export default function IndexScreen() {
     //ADD word.ID once it exists
     //if within bounds, add to response, if not, if it's in the response, remove it
     console.log('Target: ', target);
-    if ((y < cardY + cardHeight) && ( y > cardY && x > cardX && x < cardX + cardWidth)) {
+    if ((y < cardY + cardHeight - 20) && ( y > cardY && x > cardX && x < cardX + cardWidth)) {
       setResponse((prevResponse) => {
         return {
           ...prevResponse,
@@ -38,11 +38,9 @@ export default function IndexScreen() {
         }}
       });
     } else if (response[target]) {
-      //if ((y > cardY + cardHeight) ||  y < cardY || x > cardX || x < cardX + cardWidth) {
-        const newResponse = {...response};
-        delete newResponse[target];
-        setResponse(newResponse);
-      //}
+      const newResponse = {...response};
+      delete newResponse[target];
+      setResponse(newResponse);
     }
     console.log('Response: ', response);
   };
