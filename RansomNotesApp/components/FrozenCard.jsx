@@ -1,12 +1,11 @@
 import React from 'react';
-import { StyleSheet, Dimensions } from 'react-native';
+import { StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
 import FrozenWordMagnet from './FrozenWordMagnet';
 import { Text, View, SafeAreaView } from '../components/Themed';
 
 
 
-export default function FrozenCard({ staticWords }) {
-
+export default function FrozenCard({ staticWords, handleClick }) {
   const wordList = [];
   for (let key in staticWords.words) {
     wordList.push(
@@ -17,14 +16,15 @@ export default function FrozenCard({ staticWords }) {
       y={staticWords.words[key].y} />
     );
   }
-
+   //
   return (
-    <View style={styles.shadow}>
-      <View style={styles.playCard}>
-        { wordList }
+    <TouchableOpacity onPress={() => handleClick(staticWords.player)}>
+      <View style={styles.shadow} >
+        <View style={styles.playCard}>
+          { wordList }
+        </View>
       </View>
-    </View>
-
+    </TouchableOpacity>
   );
 };
 

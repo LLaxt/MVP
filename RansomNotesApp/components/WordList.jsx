@@ -4,9 +4,13 @@ import WordMagnet from './WordMagnet';
 import { Text, View, SafeAreaView } from '../components/Themed';
 import Draggable from 'react-native-draggable';
 
-export default function WordList({ words }) {
+export default function WordList({ words, checkPosition }) {
 
-  const wordList = words.map((word, index) => <View style={styles.wordContainer} key={index}><WordMagnet word={word} /></View>);
+  const wordList = words.map((word, index) =>
+    <View style={styles.wordContainer} key={index}>
+      <WordMagnet word={word} checkPosition={checkPosition} />
+    </View>
+  );
 
   return (
     <View style={styles.container}>
@@ -25,7 +29,7 @@ const styles = StyleSheet.create({
     margin: 15,
     marginTop: 5,
     paddingRight: 13,
-    backgroundColor: 'blue',
+    backgroundColor: 'transparent',
   },
   wordContainer: {
     padding: 22,

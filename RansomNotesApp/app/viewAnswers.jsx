@@ -33,10 +33,10 @@ export default function viewAnswers() {
         4: { word: '!', x: 250, y: 100 },}},
     {player: 4,
       words: {
-      1: { word: 'a', x: 15, y: 55 },
-      2: { word: 'really', x: 35, y: 55 },
-      3: { word: 'funny', x: 110, y: 55 },
-      4: { word: 'answer', x: 170, y: 70 },
+      1: { word: 'a', x: 15, y: 15 },
+      2: { word: 'really', x: 35, y: 35 },
+      3: { word: 'funny', x: 110, y: 65 },
+      4: { word: 'answer', x: 170, y: 90 },
       5: { word: '!', x: 250, y: 100 },}},
     {player: 5,
       words: {
@@ -46,13 +46,19 @@ export default function viewAnswers() {
         4: { word: '!', x: 250, y: 100 },}},
     {player: 6,
       words: {
-        1: { word: 'a', x: 65, y: 55 },
-        2: { word: 'very', x: 100, y: 55 },
-        3: { word: 'good', x: 130, y: 65 },
+        1: { word: 'a', x: 15, y: 55 },
+        2: { word: 'very', x: 40, y: 55 },
+        3: { word: 'good', x: 90, y: 65 },
         4: { word: 'answer', x: 170, y: 70 },
         5: { word: '!', x: 250, y: 100 },}}];
 
-  const finalCards = testFinalAnswers.map((card, index) => <FrozenCard staticWords={card} key={index}/> );
+  const submitVote = (player) => {
+    setVote(player);
+    console.log('Voted for player ', player)
+    router.push('/turnWinner');
+  };
+  const finalCards = testFinalAnswers.map((card, index) =>
+    <FrozenCard staticWords={card} key={index} handleClick={voting ? submitVote : () => {}} /> );
 
   return (
     <SafeAreaView style={styles.container}>
@@ -61,12 +67,11 @@ export default function viewAnswers() {
         {finalCards}
       </ScrollView>
       <View style={styles.footer}>
-        <GameButton handlePress={() => router.push('/writeAnswer')} title='Ready to Vote?' />
+        <GameButton handlePress={() => setVoting(!voting)} title={voting ? 'Click your favorite answer!' : 'Ready to Vote?'} />
       </View>
     </SafeAreaView>
   );
 }
-//add footer with timer, submit button, and refresh letters
 
 const styles = StyleSheet.create({
   container: {

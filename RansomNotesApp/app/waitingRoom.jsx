@@ -22,7 +22,7 @@ export default function WaitingRoom() {
     <SafeAreaView style={styles.container}>
       <Title text='Waiting for all players to join...' />
       { playerList }
-      <MenuButton handlePress={() => router.push('/writeAnswer')} title="Start" />
+      <MenuButton handlePress={() => router.push('/writeAnswer')} title="      Start      " />
     </SafeAreaView>
   );
 }

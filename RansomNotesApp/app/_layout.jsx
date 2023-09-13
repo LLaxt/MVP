@@ -49,8 +49,8 @@ function RootLayoutNav() {
         <Stack.Screen name="rules" options={{ headerShown: false }} />
         <Stack.Screen name="writeAnswer" options={{ headerShown: false }} />
         <Stack.Screen name="viewAnswers" options={{ headerShown: false }} />
-        {/* <Stack.Screen name="turnWinner" options={{ headerShown: false }} />
-        <Stack.Screen name="finalWinner" options={{ headerShown: false }} /> */}
+        <Stack.Screen name="turnWinner" options={{ headerShown: false }} />
+        <Stack.Screen name="finalWinner" options={{ headerShown: false }} />
       </Stack>
     </ThemeProvider>
   );

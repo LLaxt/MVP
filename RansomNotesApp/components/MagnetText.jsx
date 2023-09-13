@@ -6,7 +6,7 @@ export default function MagnetText({ text, extraStyles = {} }) {
   const randRotation = (Math.random() * 3) * (Math.random() < 0.5 ? -1 : 1);
   return (
     <View style={[styles.container, { transform: [{ rotate: `${randRotation}deg`}]}, extraStyles]}>
-      <Text>{ text }</Text>
+      <Text style={extraStyles} >{ text }</Text>
     </View>
   );
 };

@@ -42,6 +42,4 @@ expo-env.d.ts
 # @end expo-cli
 
 # game assets
-/gameAssets/prompts.txt
-/gameAssets/words.txt
-/testImages
+/gameAssets
