@@ -1,9 +1,10 @@
 /**
  * Learn more about Light and Dark modes:
  * https://docs.expo.io/guides/color-schemes/
+ * REMOVED DARK MODE FOR NOW
  */
 
-import { Text as DefaultText, useColorScheme, View as DefaultView } from 'react-native';
+import { Text as DefaultText, useColorScheme, View as DefaultView, SafeAreaView as DefaultSafeAreaView } from 'react-native';
 
 import Colors from '../constants/Colors';
 
@@ -11,7 +12,8 @@ export function useThemeColor(
   props,
   colorName,
 ) {
-  const theme = useColorScheme() ?? 'light';
+  //const theme = useColorScheme() ?? 'light';
+  const theme = 'light';
   const colorFromProps = props[theme];
 
   if (colorFromProps) {
@@ -23,14 +25,22 @@ export function useThemeColor(
 
 export function Text(props: TextProps) {
   const { style, lightColor, darkColor, ...otherProps } = props;
-  const color = useThemeColor({ light: lightColor, dark: darkColor }, 'text');
-
-  return <DefaultText style={[{ color }, style]} {...otherProps} />;
+  //removing darkmode for now
+  //const color = useThemeColor({ light: lightColor, dark: darkColor }, 'text');
+  const color = useThemeColor({ light: lightColor }, 'text');
+  return <DefaultText style={[{ color, fontFamily: "CourierPrime", fontSize: 16, }, style]} {...otherProps} />;
 }
 
 export function View(props: ViewProps) {
   const { style, lightColor, darkColor, ...otherProps } = props;
-  const backgroundColor = useThemeColor({ light: lightColor, dark: darkColor }, 'background');
+  //const backgroundColor = useThemeColor({ light: lightColor, dark: darkColor }, 'background');
+  const backgroundColor = useThemeColor({ light: lightColor }, 'background');
+  return <DefaultView style={[{ backgroundColor, fontFamily: "CourierPrime" }, style]} {...otherProps} />;
+}
 
-  return <DefaultView style={[{ backgroundColor }, style]} {...otherProps} />;
+export function SafeAreaView(props: SafeAreaViewProps) {
+  const { style, lightColor, darkColor, ...otherProps } = props;
+  //const backgroundColor = useThemeColor({ light: lightColor, dark: darkColor }, 'background');
+  const backgroundColor = useThemeColor({ light: lightColor}, 'background');
+  return <DefaultSafeAreaView style={[{ backgroundColor, fontFamily: "CourierPrime" }, style]} {...otherProps} />;
 }

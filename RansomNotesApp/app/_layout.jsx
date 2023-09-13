@@ -13,9 +13,10 @@ export {
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
-export default function RootLayout() {
+export default function RootLayout () {
   const [loaded, error] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
+    CourierPrime: require('../assets/fonts/CourierPrime-Regular.ttf'),
+    CourierPrimeBold: require('../assets/fonts/CourierPrime-Bold.ttf'),
     ...FontAwesome.font,
   });
 
@@ -44,7 +45,12 @@ function RootLayoutNav() {
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <Stack>
         <Stack.Screen name="index" options={{ headerShown: false }} />
-        {/* <Stack.Screen name="game" options={{ headerShown: false }} /> */}
+        <Stack.Screen name="waitingRoom" options={{ headerShown: false }} />
+        <Stack.Screen name="rules" options={{ headerShown: false }} />
+        <Stack.Screen name="writeAnswer" options={{ headerShown: false }} />
+        <Stack.Screen name="viewAnswers" options={{ headerShown: false }} />
+        <Stack.Screen name="turnWinner" options={{ headerShown: false }} />
+        <Stack.Screen name="finalWinner" options={{ headerShown: false }} />
       </Stack>
     </ThemeProvider>
   );
