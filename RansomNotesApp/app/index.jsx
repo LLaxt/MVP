@@ -1,7 +1,6 @@
 import { StyleSheet, Button, TextInput, Alert } from 'react-native';
 import { Link, useRouter } from 'expo-router';
 import { useState, useContext } from 'react';
-import axios from 'axios';
 import GameContext from '../functions/GameContext';
 import client from '../functions/client'
 

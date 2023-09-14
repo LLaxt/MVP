@@ -1,17 +1,7 @@
 const pool = require('../db/db');
 const generateID = require('../functions/generateRoomID');
 
-/*
-Queries/page needed:
--INDEX-
-POST: JOIN ROOM - Create row in: players
-Input: username, roomID
-Output: IF INVALID: 'Please enter a valid room ID'
-        IF ROOM IS FULL: 'This room is currently full'
-        IF VALID: 201, room_id, player_id, username
-*/
-
-//TO DO: VALIDATE WHETHER CODE ALREADY EXISTS
+//TO DO: VALIDATE WHETHER ROOM_ID ALREADY EXISTS
 const createRoom = async (req, res) => {
   const room = [ generateID() ];
   const userData = [ room[0], req.body.username, true ];
@@ -58,7 +48,10 @@ Output: array: username, playerID, current_round
 
 POST: START GAME - host starts game, set first prompt
 Input: roomID
-Output: current_round, current_prompt
+Output: current_round, current_prompt*/
+
+
+/*
 
 -WRITE ANSWER-(FUTURE FEATURE: SWAP WORDS)
 DELETE: room_words where submitted = true,
@@ -69,8 +62,32 @@ Output: { username, player_id, words: [word_id, word] }
 
 POST: SUBMIT RESPONSE - submit answer
 Input: room_id, player_id, [word_id, x, y, submitted=true]
-Output: 201 (side effect save above data and set submitted=true for words in room_words)
+Output: 201 (side effect save above data and set submitted=true for words in room_words)*/
 
+//ADD A TRANSACTION TO AVOID CONFLICT
+const getWords = async (req, res) => {
+  console.log('Request: ',req.query);
+  const room = req.query.room_id;
+  const player = req.query.player_id;
+
+  //FIX DELETE USED WORDS QUERY
+  const deleteUsedWords = `DELETE FROM room_words WHERE room_id = $1 AND player_id = $2 AND submitted = true;`;
+  const deleteVotes = `UPDATE players SET current_votes = 0 WHERE player_id = $1;`;
+  const getNewWords = `SELECT word_id, word FROM words WHERE word_id NOT IN (SELECT word_id FROM room_words WHERE room_id = $1) ORDER BY RANDOM() LIMIT 50;`;
+  const addWordsToRoom = `INSERT INTO room_words (room_id, player_id, word_id) SELECT $1, $2, word_id FROM UNNEST($3) as word_id;`; //room,player,word_ids
+  try {
+    await pool.query(deleteUsedWords, [room, player]);
+    await pool.query(deleteVotes, [player]);
+    const words = await pool.query(getNewWords, [room]);
+    console.log('Words: ', words.rows);
+    res.send(words.rows);
+  } catch (err) {
+    console.error(err)
+  };
+};
+
+
+/*
 -VIEW ANSWERS-
 GET: GET ALL SUBMISSIONS - Room_words where room_id and submitted
 Input: room_id
@@ -101,4 +118,5 @@ DELETE - ROOM_ID, ALL ROWS WITH ROOM_ID IN ALL TABLES
 module.exports = {
   createRoom,
   joinRoom,
+  getWords,
 };
