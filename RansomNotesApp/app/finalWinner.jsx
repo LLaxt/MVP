@@ -38,11 +38,11 @@ export default function FinalWinner() {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.list}>
-      <Title text='Final Scores:' />
+      <Title text='Final Scores:' extraStyles={styles.title} />
         { playerList }
       </View>
       <View style={styles.footer}>
-        <GameButton handlePress={() => router.push('/')} title="New Game" />
+        <GameButton handlePress={() => router.push('/')} title="Main Menu" />
       </View>
     </SafeAreaView>
   );
@@ -53,6 +53,10 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  title: {
+    fontSize: 24,
+    marginBottom: 10,
   },
   list: {
     flex: 5,

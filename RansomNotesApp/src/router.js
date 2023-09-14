@@ -3,6 +3,6 @@ const controller = require('./controller');
 
 const router = Router();
 
-router.get('/', controller.FIRSTQUERY);
+router.post('/createRoom', controller.createRoom);
 
 module.exports = router;

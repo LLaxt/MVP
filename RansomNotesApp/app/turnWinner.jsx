@@ -9,9 +9,11 @@ import GameButton from '../components/GameButton';
 import MagnetText from '../components/MagnetText';
 import FrozenCard from '../components/FrozenCard';
 
+//CHECK IF CURRENT ROUND = rooms_rounds
+//IF TRUE, NEXT ROUND BUTTON -> VIEW FINAL RESULTS
 export default function TurnWinner() {
   const router = useRouter();
-  const testPrompt = 'Alert someone that you are slowly sinking in quicksand';
+  const testPrompt = 'Alert someone that you are slowly sinking in quicksand ';
   const winners = [{
     player_id: 1,
     name: 'Lauren',
@@ -27,14 +29,22 @@ export default function TurnWinner() {
           1: { word: 'hi', x: 10, y: 20 },
           2: { word: 'test', x: 200, y: 40 },
           3: { word: 'hello', x: 30, y: 60 },
-          4: { word: 'neat', x: 40, y: 90 },}}]
+          4: { word: 'neat', x: 40, y: 90 },}},
+          {
+            player_id: 3,
+            name: 'Julien',
+            words: {
+              1: { word: 'hi', x: 10, y: 20 },
+              2: { word: 'test', x: 200, y: 40 },
+              3: { word: 'hello', x: 30, y: 60 },
+              4: { word: 'neat', x: 40, y: 90 },}}]
   const playerColors = ['#ff9b94', '#ffda94', '#dfff94', '#94efff', '#949fff', '#e894ff'];
 
   const winnerList = winners.map((winner, index) => {
     return (
-      <View style={styles.list}>
+      <View style={styles.list} key={winner.player_id}>
         <View>
-          <MagnetText text={winner.name} key={winner.player_id}
+          <MagnetText text={winner.name}
             extraStyles={{
               backgroundColor: playerColors[index],
               padding: 5,
@@ -72,8 +82,9 @@ const styles = StyleSheet.create({
   },
   prompt: {
     textAlign: 'center',
-    fontSize: 18,
-    padding: 30,
+    fontSize: 20,
+    padding: 20,
+    paddingBottom: 10,
   },
   list: {
     flex: 5,

@@ -10,4 +10,4 @@ app.get('/', (req, res) => res.send('Express server running!'));
 
 app.use('/game', router);
 
-app.listen(port, () => { console.log(`Express app listening on port ${port}`) });
+app.listen(port, '0.0.0.0', () => { console.log(`Express app listening on port ${port}`) });

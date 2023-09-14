@@ -6,7 +6,7 @@ import Title from '../components/Title';
 import WordList from '../components/WordList';
 import GameButton from '../components/GameButton';
 
-
+//save prompt in context
 export default function IndexScreen() {
   const router = useRouter();
   const [time, setTime] = useState(60);
@@ -17,7 +17,7 @@ export default function IndexScreen() {
   const [response, setResponse] = useState({ player: 1 });
 
   const testPrompt = 'Alert someone that you are slowly sinking in quicksand'
-  const testWords = ['hello', 'hi', 'how', 'are', 'you', '?', 'games', 'are', 'fun', '!', 'hello', 'hi', 'how', 'are', 'you', '?', 'games', 'are', 'fun', '!', 'Alphabetical', 'here', 'are', 'some', 'enormously', 'looooooong', 'words', 'more', 'hello', 'hi', 'how', 'are', 'you', '?', 'games', 'are', 'fun', '!', 'hello', 'hi', 'how', 'are', 'you', '?', 'games', 'are', 'fun', '!', 'Alphabetical', 'here', 'are', 'some', 'enormously', 'looooooong', 'weird', 'testing', 'hello', 'additional', 'another', 'every'];
+  const testWords = [{ word: 'here', id: 1}, { word: 'are', id: 12}, { word: 'ground', id: 21}, { word: 'and', id: 122}, { word: 'where', id: 14532}, { word: 'move', id: 133}, { word: 'hungry', id: 14}, { word: 'why', id: 441}, { word: 'a', id: 144}, { word: 'help', id: 31}, { word: 'didn\'t', id: 32}, { word: 'can', id: 33}, { word: 'dog', id: 34}, { word: 'try', id: 35}, { word: 'old', id: 36}, { word: 'night', id: 37}, { word: 'moon', id: 38}, { word: 'hand', id: 39}, { word: 'main', id: 40}, { word: 'there', id: 42}, { word: 'candy', id: 43}, { word: 'automobile', id: 44}, { word: 'the', id: 45}, { word: 'lift', id: 46}];
 
   // const submitCard = async () => {
   // logic for submitting words within play card
@@ -26,7 +26,6 @@ export default function IndexScreen() {
   const checkPosition = (word, x, y, target) => {
     //ADD word.ID once it exists
     //if within bounds, add to response, if not, if it's in the response, remove it
-    console.log('Target: ', target);
     if ((y < cardY + cardHeight - 20) && ( y > cardY && x > cardX && x < cardX + cardWidth)) {
       setResponse((prevResponse) => {
         return {
@@ -42,7 +41,6 @@ export default function IndexScreen() {
       delete newResponse[target];
       setResponse(newResponse);
     }
-    console.log('Response: ', response);
   };
 
   return (
@@ -57,12 +55,12 @@ export default function IndexScreen() {
           setCardY(nativeEvent.layout.y);
         }}
       >
-        <View style={styles.playCard} /></View>
+      <View style={styles.playCard} /></View>
       <WordList words={testWords} checkPosition={checkPosition}/>
       <View style={styles.footer}>
         <GameButton handlePress={() => {}} title={':' + time} />
-        <GameButton handlePress={() => router.push('/viewAnswers')} title='Submit Response' />
         <GameButton handlePress={() => {}} title='Swap' />
+        <GameButton handlePress={() => router.push('/viewAnswers')} title='Submit Response' />
         <GameButton handlePress={() => router.push('/')} title='Main Menu' />
       </View>
     </SafeAreaView>
@@ -103,7 +101,7 @@ const styles = StyleSheet.create({
     position: 'fixed',
     bottom: 0,
     flex: .4,
-    justifyContent: 'center',
+    justifyContent: 'space-around',
     alignItems: 'center',
     paddingBottom: 5,
     flexDirection: 'row',

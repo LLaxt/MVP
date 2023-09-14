@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, Dimensions } from 'react-native';
 import { Text, View, SafeAreaView } from '../components/Themed';
 import Draggable from 'react-native-draggable';
@@ -17,8 +17,8 @@ export default function WordMagnet({word, checkPosition}) {
   //update to word.word... once full obj passed in
   return (
     <Draggable style={styles.draggable} onDragRelease={getPosition} >
-      <View style={[styles.magnet, { transform: [{ rotate: `${randRotation}deg`}]}]} >
-        <Text>{ word }</Text>
+      <View style={[styles.magnet, { transform: [{ rotate: `${randRotation}deg`}]}]}  >
+        <Text>{ word.word }</Text>
       </View>
     </Draggable>
   );
@@ -29,11 +29,12 @@ const styles = StyleSheet.create({
     padding: 4,
     borderWidth: 1,
     backgroundColor: 'white',
-    alignSelf: 'flexStart',
+    alignSelf: 'flex-start',
     position: 'relative',
     display: 'inline-block',
   },
   draggable: {
     backgroundColor: 'transparent',
+    alignSelf: 'flex-start',
   }
 });

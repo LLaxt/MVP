@@ -2,8 +2,9 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
 import { SplashScreen, Stack } from 'expo-router';
-import { useEffect } from 'react';
+import { useEffect, useContext, useState } from 'react';
 import { useColorScheme } from 'react-native';
+import GameContext from '../functions/GameContext';
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -40,18 +41,21 @@ export default function RootLayout () {
 
 function RootLayoutNav() {
   const colorScheme = useColorScheme();
+  const [gameData, setGameData] = useState({});
 
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="index" options={{ headerShown: false }} />
-        <Stack.Screen name="waitingRoom" options={{ headerShown: false }} />
-        <Stack.Screen name="rules" options={{ headerShown: false }} />
-        <Stack.Screen name="writeAnswer" options={{ headerShown: false }} />
-        <Stack.Screen name="viewAnswers" options={{ headerShown: false }} />
-        <Stack.Screen name="turnWinner" options={{ headerShown: false }} />
-        <Stack.Screen name="finalWinner" options={{ headerShown: false }} />
-      </Stack>
+      <GameContext.Provider value={{gameData, setGameData}}>
+        <Stack>
+          <Stack.Screen name="index" options={{ headerShown: false }} />
+          <Stack.Screen name="waitingRoom" options={{ headerShown: false }} />
+          <Stack.Screen name="rules" options={{ headerShown: false }} />
+          <Stack.Screen name="writeAnswer" options={{ headerShown: false }} />
+          <Stack.Screen name="viewAnswers" options={{ headerShown: false }} />
+          <Stack.Screen name="turnWinner" options={{ headerShown: false }} />
+          <Stack.Screen name="finalWinner" options={{ headerShown: false }} />
+        </Stack>
+      </GameContext.Provider>
     </ThemeProvider>
   );
 }

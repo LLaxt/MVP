@@ -2,10 +2,10 @@ import { StyleSheet, Platform } from 'react-native';
 import { Link, useRouter } from 'expo-router';
 import { Text, View } from '../components/Themed';
 
-export default function Title({ text }) {
+export default function Title({ text, extraStyles = {} }) {
 
   return (
-      <Text style={styles.title}>{ text }</Text>
+      <Text style={[styles.title, extraStyles]}>{ text }</Text>
   );
 }
 

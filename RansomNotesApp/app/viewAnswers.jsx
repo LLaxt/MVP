@@ -6,6 +6,7 @@ import { Text, View, SafeAreaView } from '../components/Themed';
 import GameButton from '../components/GameButton';
 import FrozenCard from '../components/FrozenCard';
 
+//Conditionally render list only if all responses are in
 export default function viewAnswers() {
   const router = useRouter();
   const [voting, setVoting] = useState(false);
@@ -54,9 +55,9 @@ export default function viewAnswers() {
 
   const submitVote = (player) => {
     setVote(player);
-    console.log('Voted for player ', player)
     router.push('/turnWinner');
   };
+  //DO NOT RENDER CURRENT PLAYER ID CARD
   const finalCards = testFinalAnswers.map((card, index) =>
     <FrozenCard staticWords={card} key={index} handleClick={voting ? submitVote : () => {}} /> );
 

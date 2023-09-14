@@ -9,6 +9,7 @@ import MenuButton from '../components/MenuButton';
 import MagnetText from '../components/MagnetText';
 
 //change to menu button to pass in host true/false
+
 export default function WaitingRoom() {
   const router = useRouter();
   const [name, onChangeText] = useState('');
@@ -16,14 +17,17 @@ export default function WaitingRoom() {
   const testPlayers = ['Lauren', 'Nat', 'Kevin', 'Rachel', 'Matthew', 'Julien'];
   const playerColors = ['#ff9b94', '#ffda94', '#dfff94', '#94efff', '#949fff', '#e894ff'];
 
+  //AXIOS GET: repeat - keep getting players and checking until round = 1
+  //IF HOST: AXIOS POST - start game, round = 1
   const playerList = testPlayers.map((player, index) => <MagnetText text={player} key={index} extraStyles={{ backgroundColor: playerColors[index] }}/>);
 
+  ///IF NOT HOST, SWITCH BUTTON TO WAITNG FOR HOST TO START GAME
   return (
     <SafeAreaView style={styles.container}>
       <Title text='Waiting for all players to join...' />
       <Text style={styles.roomcode}>ROOM CODE: ABC123</Text>
       { playerList }
-      <MenuButton handlePress={() => router.push('/writeAnswer')} title="      Start      " />
+      <MenuButton handlePress={() => router.push('/writeAnswer')} title="All players are in - Start!" />
       <Text style={styles.instructions}>Drag word magnets fully inside the black play card area to be included in your response!</Text>
     </SafeAreaView>
   );
