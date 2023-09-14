@@ -60,8 +60,8 @@ export default function TurnWinner() {
 
   return (
     <SafeAreaView style={styles.container}>
+      <Title text={ winners.length > 1 ? 'Round Winners: ' : 'Round Winner:' }/>
       <Text style={styles.prompt}>{ testPrompt }</Text>
-      <Title text={ winners.length > 1 ? 'Round Winners: ' : 'Round Winner:' } />
       <ScrollView style={styles.scroll}>
         { winnerList }
       </ScrollView>
@@ -83,8 +83,7 @@ const styles = StyleSheet.create({
   prompt: {
     textAlign: 'center',
     fontSize: 20,
-    padding: 20,
-    paddingBottom: 10,
+    paddingHorizontal: Platform.OS === 'ios' ? 10 : 40,
   },
   list: {
     flex: 5,
@@ -98,7 +97,7 @@ const styles = StyleSheet.create({
     position: 'fixed',
     flex: .1,
     bottom: 0,
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     alignItems: 'center',
     paddingBottom: 5,
     flexDirection: 'row',

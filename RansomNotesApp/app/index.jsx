@@ -10,7 +10,6 @@ import { Text, View, SafeAreaView } from '../components/Themed';
 import Title from '../components/Title';
 import MenuButton from '../components/MenuButton'
 
-//change to menu button to pass in host true/false
 export default function IndexScreen() {
   const { gameData, setGameData } = useContext(GameContext);
   const router = useRouter();
@@ -26,11 +25,11 @@ export default function IndexScreen() {
       }]);
     } else {
       try {
-        const { room_id, player_id } = await client.post('/game/createRoom', {
+        const { data } = await client.post('/game/createRoom', {
           username: name,
         });
+        const { room_id, player_id } = data;
         const currentPlayerData = { room_id, player_id, username: name, host: true };
-        console.log('Current player data: ', currentPlayerData);
         setGameData(currentPlayerData);
         router.push(room);
       } catch (err) {
@@ -40,8 +39,8 @@ export default function IndexScreen() {
     }
   };
 
-  //make sure room code is case insensitive
-  const joinGame = (room, host) => {
+  //VALIDATE ROOM EXISTS AND NOT FULL
+  const joinGame = async (room) => {
     if (name === '') {
       Alert.alert('Add Name', 'Please add your name', [{
         text: 'OK',
@@ -50,9 +49,19 @@ export default function IndexScreen() {
     } else if (!enterRoomCode) {
       setEnterRoomCode(true);
     } else {
-      //axios call with messages, push to room if valid
-
-      router.push(room);
+      try {
+        const { data } = await client.post('/game/joinRoom', {
+          username: name,
+          room_id: roomCode,
+        });
+        const { room_id, player_id } = data;
+        const currentPlayerData = { room_id, player_id, username: name };
+        setGameData(currentPlayerData);
+        router.push(room);
+      } catch (err) {
+        console.error(err);
+        return;
+      }
     }
   };
 
@@ -62,16 +71,11 @@ export default function IndexScreen() {
       <TextInput style={styles.input} value={name} onChangeText={(text) => onChangeText(text)} placeholder='add your name...' />
       <MenuButton handlePress={() => createGame('/waitingRoom')} title='Create a New Game' />
       <MenuButton handlePress={() => joinGame('/waitingRoom')} title={enterRoomCode ? 'JOIN' : 'Join an Existing Game'} />
-      { enterRoomCode && <TextInput style={styles.input} value={roomCode} onChangeText={(text) => onChangeText(text)} placeholder='enter your room code...' /> }
+      { enterRoomCode && <TextInput style={styles.input} value={roomCode} onChangeText={(text) => setRoomCode(text)} placeholder='enter your room code...' /> }
       <MenuButton handlePress={() => router.push('/rules')} title='Rules' />
     </SafeAreaView>
   );
 }
-
-// how navigation works:
-// app/game/index.jsx -> /game
-// app/game/start.jsx -> "URL" = /game/start
-// app/(tabs)/start.jsx -> /start
 
 const styles = StyleSheet.create({
   container: {

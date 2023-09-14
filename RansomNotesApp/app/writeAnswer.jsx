@@ -45,7 +45,7 @@ export default function IndexScreen() {
 
   return (
     <SafeAreaView style={styles.container} >
-      <Text style={styles.text}>{ testPrompt }</Text>
+      <Text style={styles.prompt}>{ testPrompt }</Text>
       <View
         style={styles.shadow}
         onLayout={({nativeEvent}) => {
@@ -72,9 +72,9 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
   },
-  text: {
+  prompt: {
     textAlign: 'center',
-    marginTop: 10,
+    paddingTop: Platform.OS === 'ios' ? 10 : 40,
     fontSize: 18,
   },
   playCard: {

@@ -1,5 +1,5 @@
 //FREEZE THE PROMPT AND MAKE ANSWERS SCROLLABLE
-import { StyleSheet, ScrollView } from 'react-native';
+import { StyleSheet, ScrollView, Platform } from 'react-native';
 import { useState } from 'react';
 import { Link, useRouter } from 'expo-router';
 import { Text, View, SafeAreaView } from '../components/Themed';
@@ -84,6 +84,7 @@ const styles = StyleSheet.create({
   prompt: {
     textAlign: 'center',
     fontSize: 18,
+    paddingTop: Platform.OS === 'ios' ? 10 : 40,
   },
   text: {
     textAlign: 'center',

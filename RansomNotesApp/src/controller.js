@@ -4,10 +4,6 @@ const generateID = require('../functions/generateRoomID');
 /*
 Queries/page needed:
 -INDEX-
-POST: CREATE ROOM - Create row in: rooms, players
-Input: username
-Output: 201, room_id, player_id, username
-
 POST: JOIN ROOM - Create row in: players
 Input: username, roomID
 Output: IF INVALID: 'Please enter a valid room ID'
@@ -21,13 +17,31 @@ const createRoom = async (req, res) => {
   const userData = [ room[0], req.body.username, true ];
   const createRoomQuery = `INSERT INTO rooms (room_id) VALUES($1);`;
   const addPlayerQuery = `INSERT INTO players (room_id, username, host) VALUES($1, $2, $3) RETURNING player_id;`;
-
   try {
     await pool.query(createRoomQuery, room);
-    const player_id = await pool.query(addPlayerQuery, userData);
+    const result = await pool.query(addPlayerQuery, userData);
+    const player_id = result.rows[0].player_id;
+    const responseObj = {
+      room_id: room[0],
+      player_id,
+    };
+    res.send(responseObj);
+  } catch (err) {
+    console.error(err);
+  }
+};
+//TO DO: VALIDATE THAT THE ROOM EXISTS
+const joinRoom = async (req, res) => {
+  const room = req.body.room_id.toUpperCase();
+  const name = req.body.username;
+  const userData = [ room, name ];
+  const addPlayerQuery = `INSERT INTO players (room_id, username) VALUES($1, $2) RETURNING player_id;`;
+  try {
+    const result = await pool.query(addPlayerQuery, userData);
+    const player_id = result.rows[0].player_id;
     const responseObj = {
       room_id: room,
-      player_id
+      player_id: player_id,
     };
     res.send(responseObj);
   } catch (err) {
@@ -86,4 +100,5 @@ DELETE - ROOM_ID, ALL ROWS WITH ROOM_ID IN ALL TABLES
 
 module.exports = {
   createRoom,
+  joinRoom,
 };
