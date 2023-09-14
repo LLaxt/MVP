@@ -6,8 +6,8 @@ import Draggable from 'react-native-draggable';
 
 export default function WordList({ words, checkPosition }) {
 
-  const wordList = words.map((word, index) =>
-    <View style={styles.wordContainer} key={word.id}>
+  const wordList = words.map((word) =>
+    <View style={styles.wordContainer} key={word.word_id}>
       <WordMagnet word={word} checkPosition={checkPosition} />
     </View>
   );

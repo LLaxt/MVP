@@ -1,6 +1,6 @@
 import { StyleSheet, ScrollView, Platform } from 'react-native';
 import client from '../functions/client';
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect, useContext, useRef } from 'react';
 import { Link, useRouter } from 'expo-router';
 import { Text, View, SafeAreaView } from '../components/Themed';
 import Title from '../components/Title';
@@ -20,45 +20,55 @@ export default function IndexScreen() {
   const [cardWidth, setCardWidth] = useState(0);
   const [words, setWords] = useState([]);
   const [response, setResponse] = useState({});
+  const testPrompt = 'Alert someone that you are slowly sinking in quicksand';
 
-  const testPrompt = 'Alert someone that you are slowly sinking in quicksand'
-  //const testWords = [{ word: 'here', id: 1}, { word: 'are', id: 12}, { word: 'ground', id: 21}, { word: 'and', id: 122}, { word: 'where', id: 14532}, { word: 'move', id: 133}, { word: 'hungry', id: 14}, { word: 'why', id: 441}, { word: 'a', id: 144}, { word: 'help', id: 31}, { word: 'didn\'t', id: 32}, { word: 'can', id: 33}, { word: 'dog', id: 34}, { word: 'try', id: 35}, { word: 'old', id: 36}, { word: 'night', id: 37}, { word: 'moon', id: 38}, { word: 'hand', id: 39}, { word: 'main', id: 40}, { word: 'there', id: 42}, { word: 'candy', id: 43}, { word: 'automobile', id: 44}, { word: 'the', id: 45}, { word: 'lift', id: 46}];
+  useEffect(() => {
+    const fetchWords = async () => {
+      console.log("Fetching")
+      try {
+        const newWords = await client.get('/game/getWords', {
+          params: {
+            room_id: gameData.room_id,
+            player_id: gameData.player_id
+          }
+        });
+        setWords(newWords.data);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    fetchWords();
+  },[]);
 
-  const fetchWords = async () => {
-    try {
-      const newWords = await client.get('/game/getWords', {
-        params: {
-          room_id: gameData.room_id,
-          player_id: gameData.player_id
-        }
-      });
-      setWords(newWords);
-    } catch (err) {
-    console.error(err);
-  }};
-  useEffect(() => { fetchWords(); },[]);
-
-  // const submitCard = async () => {
-  // logic for submitting words within play card
-  //   router.push('/viewAnswers');
-  // };
-  const checkPosition = (word, x, y, target) => {
-    //ADD word.ID once it exists
-    //if within bounds, add to response, if not, if it's in the response, remove it
+  const checkPosition = (word, x, y, word_id) => {
     if ((y < cardY + cardHeight - 20) && ( y > cardY && x > cardX && x < cardX + cardWidth)) {
       setResponse((prevResponse) => {
         return {
           ...prevResponse,
-          [target]: {
+          [word_id]: {
             word: word,
             x: x - cardX,
             y: y - cardY,
         }}
       });
-    } else if (response[target]) {
+    } else if (response[word_id]) {
       const newResponse = {...response};
-      delete newResponse[target];
+      delete newResponse[word_id];
       setResponse(newResponse);
+    }
+  };
+
+  const submitCard = async () => {
+    const submission = {
+      player_id: gameData.player_id,
+      room_id: gameData.room_id,
+      submission: response,
+    }
+    try {
+      await client.post('/game/submitResponse', submission);
+      router.push('/viewAnswers');
+    } catch (err) {
+      console.error(err)
     }
   };
 
@@ -79,7 +89,7 @@ export default function IndexScreen() {
       <View style={styles.footer}>
         <GameButton handlePress={() => {}} title={':' + time} />
         <GameButton handlePress={() => {}} title='Swap' />
-        <GameButton handlePress={() => router.push('/viewAnswers')} title='Submit Response' />
+        <GameButton handlePress={submitCard} title='Submit Response' />
         <GameButton handlePress={() => router.push('/')} title='Main Menu' />
       </View>
     </SafeAreaView>
@@ -126,3 +136,5 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   }
 });
+
+  //const testWords = [{ word: 'here', id: 1}, { word: 'are', id: 12}, { word: 'ground', id: 21}, { word: 'and', id: 122}, { word: 'where', id: 14532}, { word: 'move', id: 133}, { word: 'hungry', id: 14}, { word: 'why', id: 441}, { word: 'a', id: 144}, { word: 'help', id: 31}, { word: 'didn\'t', id: 32}, { word: 'can', id: 33}, { word: 'dog', id: 34}, { word: 'try', id: 35}, { word: 'old', id: 36}, { word: 'night', id: 37}, { word: 'moon', id: 38}, { word: 'hand', id: 39}, { word: 'main', id: 40}, { word: 'there', id: 42}, { word: 'candy', id: 43}, { word: 'automobile', id: 44}, { word: 'the', id: 45}, { word: 'lift', id: 46}];
