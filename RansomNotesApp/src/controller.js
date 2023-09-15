@@ -70,20 +70,13 @@ const getWords = async (req, res) => {
   };
 };
 
-
-/*
-
--WRITE ANSWER-(FUTURE FEATURE: SWAP WORDS)
-POST: SUBMIT RESPONSE - submit answer
-Input: room_id, player_id, [word_id, x, y, submitted=true]
-Output: 201 (side effect save above data and set submitted=true for words in room_words)*/
+//WRITE ANSWER-(FUTURE FEATURE: SWAP WORDS)
 
 const submitResponse = async (req, res) => {
   const submission = req.body.submission;
   //const word_ids = Object.keys(req.body.submission);
   const player = req.body.player_id;
   const room = req.body.room_id;
-  console.log('Words added to room ', room);
   const submit = 'UPDATE room_words SET x = $1, y = $2, submitted = $3 WHERE room_id = $4 and player_id = $5 and word_id = $6;';
   try {
     for (let key in submission) {
@@ -100,8 +93,22 @@ const submitResponse = async (req, res) => {
 -VIEW ANSWERS-
 GET: GET ALL SUBMISSIONS - Room_words where room_id and submitted
 Input: room_id
-Output: player_id,
+Output: player_id,*/
 
+const getResponses = async (req, res) => {
+  const room = req.query.room_id;
+  const responseQuery = 'SELECT player_id, word, room_words.word_id, x, y FROM room_words LEFT JOIN words ON room_words.word_id = words.word_id WHERE room_id = $1 and submitted = true ORDER BY RANDOM();';
+  try {
+    const responses = await pool.query(responseQuery, [room]);
+    res.send(responses.rows);
+    } catch (err) {
+    console.error(err);
+  };
+};
+
+
+
+/*
 PUT/PATCH: VOTE - Add to selected player_id score
 Input: room_id, player_id
 Output: 201 (side effect player_id current_votes++)
@@ -128,5 +135,6 @@ module.exports = {
   createRoom,
   joinRoom,
   getWords,
-  submitResponse
+  submitResponse,
+  getResponses
 };

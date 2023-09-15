@@ -21,10 +21,14 @@ export default function IndexScreen() {
   const [words, setWords] = useState([]);
   const [response, setResponse] = useState({});
   const testPrompt = 'Alert someone that you are slowly sinking in quicksand';
+  const fetched = useRef(false)
 
+  //useref to stop expo go rerendering
   useEffect(() => {
+    if (fetched.current) {
+      return;
+    }
     const fetchWords = async () => {
-      console.log("Fetching")
       try {
         const newWords = await client.get('/game/getWords', {
           params: {
@@ -37,6 +41,7 @@ export default function IndexScreen() {
         console.error(err);
       }
     };
+    fetched.current = true;
     fetchWords();
   },[]);
 

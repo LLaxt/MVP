@@ -9,4 +9,6 @@ router.post('/joinRoom', controller.joinRoom);
 router.get('/getWords', controller.getWords);
 router.post('/submitResponse', controller.submitResponse);
 
+router.get('/getResponses', controller.getResponses);
+
 module.exports = router;

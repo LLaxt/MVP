@@ -1,65 +1,90 @@
 //FREEZE THE PROMPT AND MAKE ANSWERS SCROLLABLE
 import { StyleSheet, ScrollView, Platform } from 'react-native';
-import { useState } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { Link, useRouter } from 'expo-router';
 import { Text, View, SafeAreaView } from '../components/Themed';
+import client from '../functions/client';
 import GameButton from '../components/GameButton';
 import FrozenCard from '../components/FrozenCard';
+import GameContext from '../functions/GameContext';
+
 
 //Conditionally render list only if all responses are in
 export default function viewAnswers() {
   const router = useRouter();
+  const { gameData, setGameData } = useContext(GameContext);
+  const [responses, setResponses] = useState([]);
   const [voting, setVoting] = useState(false);
   const [vote, setVote] = useState(0);
   const testPrompt = 'Alert someone that you are slowly sinking in quicksand';
 
-  const testFinalAnswers = [
-    {player: 1,
-      words: {
-        1: { word: 'test', x: 10, y: 20 },
-        2: { word: 'test', x: 500, y: 40 },
-        3: { word: 'test', x: 30, y: 60 },
-        4: { word: 'test', x: 40, y: 90 },}},
-    {player: 2,
-      words: {
-        1: { word: 'a', x: 65, y: 55 },
-        2: { word: 'funny', x: 100, y: 55 },
-        3: { word: 'answer', x: 170, y: 70 },
-        4: { word: '!', x: 250, y: 100 },}},
-    {player: 3,
-      words: {
-        1: { word: 'another', x: 20, y: 35 },
-        2: { word: 'funny', x: 100, y: 65 },
-        3: { word: 'answer', x: 170, y: 70 },
-        4: { word: '!', x: 250, y: 100 },}},
-    {player: 4,
-      words: {
-      1: { word: 'a', x: 15, y: 15 },
-      2: { word: 'really', x: 35, y: 35 },
-      3: { word: 'funny', x: 110, y: 65 },
-      4: { word: 'answer', x: 170, y: 90 },
-      5: { word: '!', x: 250, y: 100 },}},
-    {player: 5,
-      words: {
-        1: { word: 'an', x: 65, y: 55 },
-        2: { word: 'okay', x: 100, y: 55 },
-        3: { word: 'answer', x: 170, y: 70 },
-        4: { word: '!', x: 250, y: 100 },}},
-    {player: 6,
-      words: {
-        1: { word: 'a', x: 15, y: 55 },
-        2: { word: 'very', x: 40, y: 55 },
-        3: { word: 'good', x: 90, y: 65 },
-        4: { word: 'answer', x: 170, y: 70 },
-        5: { word: '!', x: 250, y: 100 },}}];
+  let testAnswers = [
+      { player_id: 2, word_id: 1, word: 'a', x: 65, y: 55 },
+      { player_id: 2, word_id: 2, word: 'funny', x: 100, y: 55 },
+      { player_id: 2, word_id: 3, word: 'answer', x: 170, y: 70 },
+      { player_id: 2, word_id: 4, word: '!', x: 250, y: 100 },
+      { player_id: 3, word_id: 1, word: 'another', x: 20, y: 35 },
+      { player_id: 3, word_id: 2, word: 'funny', x: 100, y: 65 },
+      { player_id: 3, word_id: 3, word: 'answer', x: 170, y: 70 },
+      { player_id: 3, word_id: 4, word: '!', x: 250, y: 100 },
+      { player_id: 4, word_id: 1, word: 'a', x: 15, y: 15 },
+      { player_id: 4, word_id: 2, word: 'really', x: 35, y: 35 },
+      { player_id: 4, word_id: 3, word: 'funny', x: 110, y: 65 },
+      { player_id: 4, word_id: 4, word: 'answer', x: 170, y: 90 },
+      { player_id: 4, word_id: 5, word: '!', x: 250, y: 100 },
+      { player_id: 5, word_id: 1, word: 'a', x: 15, y: 55 },
+      { player_id: 5, word_id: 2, word: 'very', x: 40, y: 55 },
+      { player_id: 5, word_id: 3, word: 'good', x: 90, y: 65 },
+      { player_id: 5, word_id: 4, word: 'answer', x: 170, y: 70 },
+      { player_id: 5, word_id: 5, word: '!', x: 250, y: 100 },
+      { player_id: 1, word_id: 4, word: 'test', x: 40, y: 90 },
+      { player_id: 1, word_id: 5, word: 'test', x: 40, y: 90 },
+      { player_id: 1, word_id: 6, word: 'test', x: 40, y: 90 },
+      { player_id: 1, word_id: 7, word: 'test', x: 40, y: 90 },];
+
+  useEffect(() => {
+    const getAnswers = async () => {
+      try {
+        const responseData = await client.get('/game/getResponses', {
+          params: {
+            room_id: gameData.room_id
+          }
+        });
+        let playerCards = {};
+        let data = responseData.data;
+        for (let i = 0; i < data.length; i++) {
+          let magnet = { word_id: data[i].word_id, word: data[i].word, x: data[i].x, y: data[i].y,};
+          if ( playerCards[data[i].player_id] === undefined ) {
+            playerCards[data[i].player_id] = [magnet];
+          } else {
+            playerCards[data[i].player_id].push(magnet);
+          }
+        }
+        //TEST DATA
+        for (let i = 0; i < testAnswers.length; i++) {
+          let magnet = { word_id: testAnswers[i].word_id, word: testAnswers[i].word, x: testAnswers[i].x, y: testAnswers[i].y,};
+          if ( playerCards[testAnswers[i].player_id] === undefined ) {
+            playerCards[testAnswers[i].player_id] = [magnet];
+          } else {
+            playerCards[testAnswers[i].player_id].push(magnet);
+          }
+        }
+        setResponses(playerCards);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    getAnswers();
+  },[]);
 
   const submitVote = (player) => {
     setVote(player);
     router.push('/turnWinner');
   };
-  //DO NOT RENDER CURRENT PLAYER ID CARD
-  const finalCards = testFinalAnswers.map((card, index) =>
-    <FrozenCard staticWords={card} key={index} handleClick={voting ? submitVote : () => {}} /> );
+  //DO NOT RENDER CURRENT PLAYER ID CARD IN REAL SETTING
+  const finalCards = Object.keys(responses).map((id) =>
+    <FrozenCard staticWords={responses[id]} key={id} player={id} handleClick={voting ? submitVote : () => {}} />
+  );
 
   return (
     <SafeAreaView style={styles.container}>
