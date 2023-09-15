@@ -10,8 +10,8 @@ export default function FrozenCard({ staticWords, player, handleClick = () => {}
     <FrozenWordMagnet
       word={magnet.word}
       key={magnet.word_id}
-      x={magnet.x}
-      y={magnet.y} />
+      x={magnet.x - 10}
+      y={magnet.y - 10} />
   );
 
   return (

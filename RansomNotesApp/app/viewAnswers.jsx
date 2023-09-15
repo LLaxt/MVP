@@ -15,7 +15,6 @@ export default function viewAnswers() {
   const { gameData, setGameData } = useContext(GameContext);
   const [responses, setResponses] = useState([]);
   const [voting, setVoting] = useState(false);
-  const [vote, setVote] = useState(0);
   const testPrompt = 'Alert someone that you are slowly sinking in quicksand';
 
   let testAnswers = [
@@ -37,10 +36,10 @@ export default function viewAnswers() {
       { player_id: 5, word_id: 3, word: 'good', x: 90, y: 65 },
       { player_id: 5, word_id: 4, word: 'answer', x: 170, y: 70 },
       { player_id: 5, word_id: 5, word: '!', x: 250, y: 100 },
-      { player_id: 1, word_id: 4, word: 'test', x: 40, y: 90 },
-      { player_id: 1, word_id: 5, word: 'test', x: 40, y: 90 },
-      { player_id: 1, word_id: 6, word: 'test', x: 40, y: 90 },
-      { player_id: 1, word_id: 7, word: 'test', x: 40, y: 90 },];
+      { player_id: 6, word_id: 4, word: 'i', x: 40, y: 40 },
+      { player_id: 6, word_id: 5, word: 'love', x: 40, y: 80 },
+      { player_id: 6, word_id: 6, word: '!', x: 180, y: 130 },
+      { player_id: 6, word_id: 7, word: 'coding', x: 100, y: 100 },];
 
   useEffect(() => {
     const getAnswers = async () => {
@@ -60,7 +59,7 @@ export default function viewAnswers() {
             playerCards[data[i].player_id].push(magnet);
           }
         }
-        //TEST DATA
+        //TEST DATA - REMOVE IN PROD////
         for (let i = 0; i < testAnswers.length; i++) {
           let magnet = { word_id: testAnswers[i].word_id, word: testAnswers[i].word, x: testAnswers[i].x, y: testAnswers[i].y,};
           if ( playerCards[testAnswers[i].player_id] === undefined ) {
@@ -77,9 +76,17 @@ export default function viewAnswers() {
     getAnswers();
   },[]);
 
-  const submitVote = (player) => {
-    setVote(player);
-    router.push('/turnWinner');
+  const submitVote = async (player) => {
+    const vote = {
+      player_id: player,
+      room_id: gameData.room_id
+    };
+    try {
+      await client.post('/game/submitVote', vote);
+      router.push('/turnWinner');
+    } catch (err) {
+      console.error(err);
+    }
   };
   //DO NOT RENDER CURRENT PLAYER ID CARD IN REAL SETTING
   const finalCards = Object.keys(responses).map((id) =>

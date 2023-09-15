@@ -106,7 +106,19 @@ const getResponses = async (req, res) => {
   };
 };
 
-
+const submitVote = async (req, res) => {
+  console.log('REQUEST BODY: ',req.body);
+  const room = req.body.room_id;
+  const player = req.body.player_id;
+  console.log('roomplayer', room, player);
+  const submitVote = 'UPDATE players SET current_votes = current_votes + 1 WHERE player_id = $1 AND room_id = $2;';
+  try {
+    await pool.query(submitVote, [player, room]);
+    res.sendStatus(201);
+    } catch (err) {
+    console.error(err);
+  };
+};
 
 /*
 PUT/PATCH: VOTE - Add to selected player_id score
@@ -136,5 +148,6 @@ module.exports = {
   joinRoom,
   getWords,
   submitResponse,
-  getResponses
+  getResponses,
+  submitVote
 };

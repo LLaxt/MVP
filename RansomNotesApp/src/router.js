@@ -10,5 +10,6 @@ router.get('/getWords', controller.getWords);
 router.post('/submitResponse', controller.submitResponse);
 
 router.get('/getResponses', controller.getResponses);
+router.post('/submitVote', controller.submitVote);
 
 module.exports = router;
