@@ -53,8 +53,16 @@ export default function IndexScreen() {
           username: name,
           room_id: roomCode,
         });
+        if (typeof(data) === 'string') {
+          Alert.alert('Invalid Room Code', data, [{
+            text: 'OK',
+            onPress: () => {},
+          }]);
+          setRoomCode('');
+          return;
+        };
         const { room_id, player_id } = data;
-        const currentPlayerData = { room_id, player_id, username: name };
+        const currentPlayerData = { room_id, player_id, username: name, round: 0 };
         setGameData(currentPlayerData);
         router.push(room);
       } catch (err) {

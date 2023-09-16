@@ -20,7 +20,7 @@ const createRoom = async (req, res) => {
     console.error(err);
   }
 };
-//TO DO: VALIDATE THAT THE ROOM EXISTS
+//Customize number of players in the future? (currently hard coded)
 const joinRoom = async (req, res) => {
   const room = req.body.room_id.toUpperCase();
   const name = req.body.username;
@@ -33,8 +33,14 @@ const joinRoom = async (req, res) => {
       room_id: room,
       player_id: player_id,
     };
+    const countPlayers = 'SELECT COUNT(*) FROM players WHERE room_id = $1;'
+    const numPlayers = await pool.query(countPlayers, [room]);
+    if (numPlayers > 5) {
+      res.send('Room full - please start a new game');
+    }
     res.send(responseObj);
   } catch (err) {
+    res.send('Please enter a valid room code');
     console.error(err);
   }
 };
@@ -45,9 +51,47 @@ GET: GET PLAYERS WAIT START- Get all players in room and check current_round
 Input: roomID
 Output: array: username, playerID, current_round
 
+
 POST: START GAME - host starts game, set first prompt
 Input: roomID
 Output: current_round, current_prompt*/
+const getPlayers = async (req, res) => {
+  const room = req.body.room_id;
+  const returnPlayers = 'SELECT username, player_id FROM players where room_id = $1;';
+  const checkStart = 'SELECT current_round FROM rooms where room_id=$1;';
+  try {
+    const players = await pool.query(returnPlayers, [room]);
+    const round = await pool.query(checkStart, [room]);
+    console.log('Round: ', round);
+    const returnObj = {
+      round: round.rows[0],
+      players: players.rows,
+    }
+    res.send(returnObj);
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+const startGame = async (req, res) => {
+  const room = req.body.room_id;
+  const getRandPrompt = `SELECT prompt_id FROM prompts WHERE prompt_id NOT IN (SELECT prompt_id FROM room_prompts WHERE room_id = $1) ORDER BY RANDOM() LIMIT 1;`;
+  const updateCurrentPrompt = 'UPDATE rooms SET current_prompt = $1 WHERE room_id = $2;';
+  const addToRoomPrompts = 'INSERT INTO room_prompts (prompt_id) VALUES($1) WHERE room_id = $2;';
+  const startRound = 'UPDATE rooms SET current_round = 1 WHERE room_id = $1;';
+
+  try {
+    const result = await pool.query(getRandPrompt, [room]);
+    const randPromptID = result.rows[0].prompt_id;
+    await pool.query(updateCurrentPrompt, [randPromptID, room]);
+    await pool.query(addToRoomPrompts, [randPromptID, room]);
+    await pool.query(startRound, [room])
+    res.sendStatus(201);
+  } catch(err) {
+    console.error(err);
+  }
+};
+
 
 //ADD A TRANSACTION TO AVOID CONFLICT
 const getWords = async (req, res) => {
@@ -107,10 +151,8 @@ const getResponses = async (req, res) => {
 };
 
 const submitVote = async (req, res) => {
-  console.log('REQUEST BODY: ',req.body);
   const room = req.body.room_id;
   const player = req.body.player_id;
-  console.log('roomplayer', room, player);
   const submitVote = 'UPDATE players SET current_votes = current_votes + 1 WHERE player_id = $1 AND room_id = $2;';
   try {
     await pool.query(submitVote, [player, room]);
@@ -120,15 +162,48 @@ const submitVote = async (req, res) => {
   };
 };
 
+
+
 /*
-PUT/PATCH: VOTE - Add to selected player_id score
-Input: room_id, player_id
-Output: 201 (side effect player_id current_votes++)
 
 -TURN WINNER-
 GET: GET WINNERS AND THEIR RESPONSES, ADD +1 TO PLAYER SCORES
 Input: room_id  (calculate winners)
-Output: { winning player_ids, usernames, room_words submitted, words, x, y }
+Output: { winning player_ids, usernames, room_words submitted, words, x, y } */
+
+const getWinners = async (req, res) => {
+  const room = req.query.room_id;
+  const getPlayers = 'SELECT player_id, current_votes, username FROM players WHERE room_id = $1;';
+  const getCard = 'SELECT room_words.word_id, word, x, y FROM room_words LEFT JOIN words ON room_words.word_id = words.word_id WHERE room_id = $1 AND player_id = $2 AND submitted = true;';
+  const addToFinalScore = 'UPDATE players SET score = score + 1 WHERE room_id = $1 AND player_id = $2;';
+  const winners = [];
+  try {
+    const votes = await pool.query(getPlayers, [room]);
+    let highestVotes = 0;
+    for (let i = 0; i < votes.rows.length; i++) {
+      if (votes.rows[i].current_votes > highestVotes) {
+        highestVotes = votes.rows[i].current_votes;
+      }
+    }
+    for (let i = 0; i < votes.rows.length; i++) {
+      if (votes.rows[i].current_votes === highestVotes) {
+        const wordData = await pool.query(getCard, [room, votes.rows[i].player_id]);
+        await pool.query(addToFinalScore, [room, votes.rows[i].player_id])
+        const winnerData = {
+          username: votes.rows[i].username,
+          player_id: votes.rows[i].player_id,
+          words: wordData.rows,
+        }
+        winners.push(winnerData);
+      }
+    }
+    res.send(winners);
+  } catch (err) {
+    console.error(err);
+  };
+};
+
+/*
 
 GET CHECK ROUND
 Input: room_id
@@ -146,8 +221,11 @@ DELETE - ROOM_ID, ALL ROWS WITH ROOM_ID IN ALL TABLES
 module.exports = {
   createRoom,
   joinRoom,
+  getPlayers,
+  startGame,
   getWords,
   submitResponse,
   getResponses,
-  submitVote
+  submitVote,
+  getWinners,
 };

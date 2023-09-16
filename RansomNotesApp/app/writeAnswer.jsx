@@ -71,6 +71,7 @@ export default function IndexScreen() {
     }
     try {
       await client.post('/game/submitResponse', submission);
+      fetched.current = false;
       router.push('/viewAnswers');
     } catch (err) {
       console.error(err)

@@ -1,6 +1,6 @@
 import { StyleSheet, Button, TextInput, Alert, ScrollView } from 'react-native';
 import { Link, useRouter } from 'expo-router';
-import { useState } from 'react';
+import { useState, useContext, useEffect } from 'react';
 
 import EditScreenInfo from '../components/EditScreenInfo';
 import { Text, View, SafeAreaView } from '../components/Themed';
@@ -8,43 +8,54 @@ import Title from '../components/Title';
 import GameButton from '../components/GameButton';
 import MagnetText from '../components/MagnetText';
 import FrozenCard from '../components/FrozenCard';
+import GameContext from '../functions/GameContext';
+import client from '../functions/client';
 
 //CHECK IF CURRENT ROUND = rooms_rounds
 //IF TRUE, NEXT ROUND BUTTON -> VIEW FINAL RESULTS
 export default function TurnWinner() {
   const router = useRouter();
+  const [ winners, setWinners ] = useState([]);
+  const { gameData, setGameData } = useContext(GameContext);
+
+
   const testPrompt = 'Alert someone that you are slowly sinking in quicksand ';
-  const winners = [{
-    player_id: 1,
-    name: 'Lauren',
-    words: {
-      1: { word: 'hi', x: 10, y: 20 },
-      2: { word: 'test', x: 200, y: 40 },
-      3: { word: 'hello', x: 30, y: 60 },
-      4: { word: 'neat', x: 40, y: 90 },}},
-      {
-        player_id: 2,
-        name: 'Nat',
-        words: {
-          1: { word: 'hi', x: 10, y: 20 },
-          2: { word: 'test', x: 200, y: 40 },
-          3: { word: 'hello', x: 30, y: 60 },
-          4: { word: 'neat', x: 40, y: 90 },}},
-          {
-            player_id: 3,
-            name: 'Julien',
-            words: {
-              1: { word: 'hi', x: 10, y: 20 },
-              2: { word: 'test', x: 200, y: 40 },
-              3: { word: 'hello', x: 30, y: 60 },
-              4: { word: 'neat', x: 40, y: 90 },}}]
+  const testWinners = [
+    { player_id: 2000,
+      username: 'Nat',
+      words: [{ player_id: 2, word_id: 1, word: 'a', x: 65, y: 55 },
+      { player_id: 2, word_id: 2, word: 'funny', x: 100, y: 55 },
+      { player_id: 2, word_id: 3, word: 'answer', x: 170, y: 70 },
+      { player_id: 2, word_id: 4, word: '!', x: 250, y: 100 }
+    ]},
+    { player_id: 2001,
+      username: 'Julien',
+      words: [{ player_id: 4, word_id: 1, word: 'a', x: 15, y: 15 },
+        { player_id: 4, word_id: 2, word: 'really', x: 35, y: 35 },
+        { player_id: 4, word_id: 3, word: 'funny', x: 110, y: 65 },
+        { player_id: 4, word_id: 4, word: 'answer', x: 170, y: 90 },
+        { player_id: 4, word_id: 5, word: '!', x: 250, y: 100 }]}];
+
   const playerColors = ['#ff9b94', '#ffda94', '#dfff94', '#94efff', '#949fff', '#e894ff'];
+
+  useEffect(() => {
+    const fetchWinners = async () => {
+      try {
+        const winnerData = await client.get('/game/getWinners', {
+          params: { room_id: gameData.room_id }
+        });
+        setWinners(winnerData.data.concat(testWinners));
+      } catch (err) {
+        console.error(err);
+    }};
+    fetchWinners();
+  }, []);
 
   const winnerList = winners.map((winner, index) => {
     return (
       <View style={styles.list} key={winner.player_id}>
         <View>
-          <MagnetText text={winner.name}
+          <MagnetText text={winner.username}
             extraStyles={{
               backgroundColor: playerColors[index],
               padding: 5,
@@ -54,7 +65,7 @@ export default function TurnWinner() {
             }}
           />
         </View>
-        <FrozenCard staticWords={winner}/>
+        <FrozenCard staticWords={winner.words}/>
       </View>
     )});
 
