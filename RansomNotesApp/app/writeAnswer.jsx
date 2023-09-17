@@ -21,13 +21,13 @@ export default function IndexScreen() {
   const [words, setWords] = useState([]);
   const [response, setResponse] = useState({});
   const testPrompt = 'Alert someone that you are slowly sinking in quicksand';
-  const fetched = useRef(false)
+  //const fetched = useRef(false)
 
   //useref to stop expo go rerendering
   useEffect(() => {
-    if (fetched.current) {
-      return;
-    }
+    // if (fetched.current) {
+    //   return;
+    // }
     const fetchWords = async () => {
       try {
         const newWords = await client.get('/game/getWords', {
@@ -41,9 +41,9 @@ export default function IndexScreen() {
         console.error(err);
       }
     };
-    fetched.current = true;
+    // fetched.current = true;
     fetchWords();
-  },[]);
+  },[gameData.current_round]);
 
   const checkPosition = (word, x, y, word_id) => {
     if ((y < cardY + cardHeight - 20) && ( y > cardY && x > cardX && x < cardX + cardWidth)) {
@@ -71,7 +71,7 @@ export default function IndexScreen() {
     }
     try {
       await client.post('/game/submitResponse', submission);
-      fetched.current = false;
+      //fetched.current = false;
       router.push('/viewAnswers');
     } catch (err) {
       console.error(err)
