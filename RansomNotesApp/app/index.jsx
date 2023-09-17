@@ -32,6 +32,9 @@ export default function IndexScreen() {
         setGameData(currentPlayerData);
         setEnterRoomCode(false);
         setRoomCode('');
+        await client.post('/game/setPrompt', {
+          room_id,
+        })
         router.push('/waitingRoom');
       } catch (err) {
         console.error(err);

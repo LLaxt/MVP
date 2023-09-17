@@ -59,6 +59,12 @@ export default function viewAnswers() {
             playerCards[data[i].player_id].push(magnet);
           }
         }
+        if (gameData.host === true) {
+          await client.post('/game/setNextRound', {
+            room_id: gameData.room_id
+          })
+        }
+
         //TEST DATA - REMOVE IN PROD////
         for (let i = 0; i < testAnswers.length; i++) {
           let magnet = { word_id: testAnswers[i].word_id, word: testAnswers[i].word, x: testAnswers[i].x, y: testAnswers[i].y,};

@@ -17,7 +17,7 @@ export default function WaitingRoom() {
   const [players, setPlayers] = useState([]);
   const { gameData, setGameData } = useContext(GameContext);
 
-  const testPlayers = ['Lauren', 'Nat', 'Kevin', 'Rachel', 'Matthew', ];//'Julien'
+  const testPlayers = ['Lauren', 'Nat', 'Kevin', 'Rachel', 'Matthew'];// , 'Julien'
   const playerColors = ['#ff9b94', '#ffda94', '#dfff94', '#94efff', '#949fff', '#e894ff'];
 
   const testPlayerList = testPlayers.map((player, index) => <MagnetText text={player} key={index} extraStyles={{ backgroundColor: playerColors[index] }}/>);
@@ -41,9 +41,11 @@ export default function WaitingRoom() {
     };
   };
 
-  while (gameData.round === 0) {
-    setTimeout(getPlayers, 1000);
-  }
+
+
+  // while (gameData.round === 0) {
+  //   setTimeout(getPlayers, 1000);
+  // }
 
   const startGame = async () => {
     try {
@@ -51,7 +53,7 @@ export default function WaitingRoom() {
         ...gameData,
         round: 1,
       });
-      await client.post('/game/startGame', {
+      await client.post('/game/setNextRound', {
         room_id: gameData.room_id
       })
       router.push('/writeAnswer');

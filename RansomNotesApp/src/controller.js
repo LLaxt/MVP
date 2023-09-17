@@ -20,43 +20,62 @@ const createRoom = async (req, res) => {
     console.error(err);
   }
 };
-//Customize number of players in the future? (currently hard coded)
+
+const setPrompt = async (req, res) => {
+  const room = req.body.room_id;
+  const getRandPrompt = `SELECT prompt_id FROM prompts WHERE prompt_id NOT IN (SELECT prompt_id FROM room_prompts WHERE room_id = $1) ORDER BY RANDOM() LIMIT 1;`;
+  const updateCurrentPrompt = 'UPDATE rooms SET current_prompt = $1 WHERE room_id = $2;';
+  const addToRoomPrompts = 'INSERT INTO room_prompts (prompt_id, room_id) VALUES($1, $2);';
+  try {
+    const result = await pool.query(getRandPrompt, [room]);
+    const randPromptID = result.rows[0].prompt_id;
+    await pool.query(updateCurrentPrompt, [randPromptID, room]);
+    await pool.query(addToRoomPrompts, [randPromptID, room]);
+    res.sendStatus(201);
+  } catch (err) {
+    console.error(err);
+  }
+}
+
 const joinRoom = async (req, res) => {
   const room = req.body.room_id.toUpperCase();
   const name = req.body.username;
-  const userData = [ room, name ];
+  const getMaxPlayers = 'SELECT max_players FROM rooms WHERE room_id = $1;';
+  const countPlayers = 'SELECT COUNT(*) FROM players WHERE room_id = $1;';
   const addPlayerQuery = `INSERT INTO players (room_id, username) VALUES($1, $2) RETURNING player_id;`;
   try {
-    const result = await pool.query(addPlayerQuery, userData);
-    const player_id = result.rows[0].player_id;
-    const responseObj = {
-      room_id: room,
-      player_id: player_id,
-    };
-    const countPlayers = 'SELECT COUNT(*) FROM players WHERE room_id = $1;'
-    const numPlayers = await pool.query(countPlayers, [room]);
-    console.log('Number of players: ', numPlayers);
-    if (numPlayers > 5) {
+    const maxResult = await pool.query(getMaxPlayers, [room]);
+    const countResult = await pool.query(countPlayers, [room]);
+    const maxPlayers = parseInt(maxResult.rows[0].max_players);
+    const numPlayers = parseInt(countResult.rows[0].count);
+    if (numPlayers === maxPlayers) {
       res.send('FULL');
+    } else {
+      const result = await pool.query(addPlayerQuery, [ room, name ]);
+      const player_id = result.rows[0].player_id;
+      const responseObj = {
+        room_id: room,
+        player_id: player_id,
+      };
+      res.send(responseObj);
     }
-    console.log('Server response object: ', responseObj);
-    res.send(responseObj);
   } catch (err) {
     res.send('INVALID');
     console.error(err);
   }
 };
 
-/*
--WAITING ROOM-
-GET: GET PLAYERS WAIT START- Get all players in room and check current_round
-Input: roomID
-Output: array: username, playerID, current_round
+const getPrompt = async (req, res) => {
+  const room = req.query.room_id;
+  const getNewPrompt = 'SELECT prompt FROM prompts LEFT JOIN rooms ON rooms.current_prompt = prompts.prompt_id WHERE room_id = $1;';
+  try {
+    const prompt = await pool.query(getNewPrompt, [room]);
+    res.send(prompt.rows[0].prompt_id);
+  } catch (err) {
+    console.error(err);
+  }
+};
 
-
-POST: START GAME - host starts game, set first prompt
-Input: roomID
-Output: current_round, current_prompt*/
 const getPlayers = async (req, res) => {
   const room = req.body.room_id;
   const returnPlayers = 'SELECT username, player_id FROM players where room_id = $1;';
@@ -64,7 +83,6 @@ const getPlayers = async (req, res) => {
   try {
     const players = await pool.query(returnPlayers, [room]);
     const round = await pool.query(checkStart, [room]);
-    console.log('Round: ', round);
     const returnObj = {
       round: round.rows[0],
       players: players.rows,
@@ -75,19 +93,11 @@ const getPlayers = async (req, res) => {
   }
 };
 
-const startGame = async (req, res) => {
+const setNextRound = async (req, res) => {
   const room = req.body.room_id;
-  const getRandPrompt = `SELECT prompt_id FROM prompts WHERE prompt_id NOT IN (SELECT prompt_id FROM room_prompts WHERE room_id = $1) ORDER BY RANDOM() LIMIT 1;`;
-  const updateCurrentPrompt = 'UPDATE rooms SET current_prompt = $1 WHERE room_id = $2;';
-  const addToRoomPrompts = 'INSERT INTO room_prompts (prompt_id, room_id) VALUES($1, $2);';
-  const startRound = 'UPDATE rooms SET current_round = 1 WHERE room_id = $1;';
-
+  const updateRound = 'UPDATE rooms SET current_round = current_round + 1 WHERE room_id = $1;';
   try {
-    const result = await pool.query(getRandPrompt, [room]);
-    const randPromptID = result.rows[0].prompt_id;
-    await pool.query(updateCurrentPrompt, [randPromptID, room]);
-    await pool.query(addToRoomPrompts, [randPromptID, room]);
-    await pool.query(startRound, [room])
+    await pool.query(updateRound, [room]);
     res.sendStatus(201);
   } catch(err) {
     console.error(err);
@@ -135,12 +145,6 @@ const submitResponse = async (req, res) => {
   res.sendStatus(201);
 }
 
-/*
--VIEW ANSWERS-
-GET: GET ALL SUBMISSIONS - Room_words where room_id and submitted
-Input: room_id
-Output: player_id,*/
-
 const getResponses = async (req, res) => {
   const room = req.query.room_id;
   const responseQuery = 'SELECT player_id, word, room_words.word_id, x, y FROM room_words LEFT JOIN words ON room_words.word_id = words.word_id WHERE room_id = $1 and submitted = true ORDER BY RANDOM();';
@@ -164,14 +168,22 @@ const submitVote = async (req, res) => {
   };
 };
 
-
-
-/*
-
--TURN WINNER-
-GET: GET WINNERS AND THEIR RESPONSES, ADD +1 TO PLAYER SCORES
-Input: room_id  (calculate winners)
-Output: { winning player_ids, usernames, room_words submitted, words, x, y } */
+const getRound = async (req, res) => {
+  const room = req.query.room_id;
+  const checkMax = 'SELECT rounds, current_round FROM rooms WHERE room_id = $1;';
+  try {
+    const roundData = await pool.query(checkMax, [room]);
+    const { current_round, rounds } = roundData.rows[0];
+    if ( current_round > rounds) {
+      res.send('END');
+    } else {
+      const returnObj = { current_round };
+      res.send(returnObj);
+    }
+  } catch(err) {
+    console.error(err);
+  }
+}
 
 const getWinners = async (req, res) => {
   const room = req.query.room_id;
@@ -223,8 +235,11 @@ DELETE - ROOM_ID, ALL ROWS WITH ROOM_ID IN ALL TABLES
 module.exports = {
   createRoom,
   joinRoom,
+  setPrompt,
   getPlayers,
-  startGame,
+  getPrompt,
+  setNextRound,
+  getRound,
   getWords,
   submitResponse,
   getResponses,

@@ -45,11 +45,21 @@ export default function TurnWinner() {
           params: { room_id: gameData.room_id }
         });
         setWinners(winnerData.data.concat(testWinners));
+        const roundData = await client.get('/game/getRound', {
+          params: {room_id: gameData.room_id,}
+        });
+        const current_round = roundData.data === 'END' ? 'END' : roundData.data.current_round;
+        setGameData({
+          ...gameData,
+          current_round,
+        })
       } catch (err) {
         console.error(err);
     }};
     fetchWinners();
   }, []);
+
+
 
   const winnerList = winners.map((winner, index) => {
     return (
@@ -77,8 +87,11 @@ export default function TurnWinner() {
         { winnerList }
       </ScrollView>
       <View style={styles.footer}>
-        <GameButton handlePress={() => router.push('/writeAnswer')} title="Next round" />
-        <GameButton handlePress={() => router.push('/finalWinner')} title="Finish Game" />
+        {
+          gameData.current_round === 'END' ?
+          <GameButton handlePress={() => router.push('/finalWinner')} title="See Final Scores" /> :
+           <GameButton handlePress={() => router.push('/writeAnswer')} title="Next round" />
+        }
         <GameButton handlePress={() => router.push('/')} title="Main Menu" />
       </View>
     </SafeAreaView>
