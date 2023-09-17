@@ -30,7 +30,9 @@ export default function IndexScreen() {
         const { room_id, player_id } = data;
         const currentPlayerData = { room_id, player_id, username: name, host: true };
         setGameData(currentPlayerData);
-        router.push(room);
+        setEnterRoomCode(false);
+        setRoomCode('');
+        router.push('/waitingRoom');
       } catch (err) {
         console.error(err);
         return;
@@ -38,7 +40,6 @@ export default function IndexScreen() {
     }
   };
 
-  //VALIDATE ROOM EXISTS AND NOT FULL
   const joinGame = async (room) => {
     if (name === '') {
       Alert.alert('Add Name', 'Please add your name', [{
@@ -53,8 +54,16 @@ export default function IndexScreen() {
           username: name,
           room_id: roomCode,
         });
-        if (typeof(data) === 'string') {
-          Alert.alert('Invalid Room Code', data, [{
+        if (data === 'INVALID') {
+          Alert.alert('Invalid Room Code', 'Please enter a valid room code', [{
+            text: 'OK',
+            onPress: () => {},
+          }]);
+          setRoomCode('');
+          return;
+        }
+        if (data === 'FULL') {
+          Alert.alert('Invalid Room Code', 'Room is full - please start a new game', [{
             text: 'OK',
             onPress: () => {},
           }]);
@@ -64,7 +73,9 @@ export default function IndexScreen() {
         const { room_id, player_id } = data;
         const currentPlayerData = { room_id, player_id, username: name, round: 0 };
         setGameData(currentPlayerData);
-        router.push(room);
+        setEnterRoomCode(false);
+        setRoomCode('');
+        router.push('/waitingRoom');
       } catch (err) {
         console.error(err);
         return;
@@ -76,8 +87,8 @@ export default function IndexScreen() {
     <SafeAreaView style={styles.container}>
       <Title extraStyles={styles.title} text='Ransom Notes!'/>
       <TextInput style={styles.input} value={name} onChangeText={(text) => onChangeText(text)} placeholder='add your name...' />
-      <MenuButton handlePress={() => createGame('/waitingRoom')} title='Create a New Game' />
-      <MenuButton handlePress={() => joinGame('/waitingRoom')} title={enterRoomCode ? 'JOIN' : 'Join an Existing Game'} />
+      <MenuButton handlePress={createGame} title='Create a New Game' />
+      <MenuButton handlePress={joinGame} title={enterRoomCode ? 'JOIN' : 'Join an Existing Game'} />
       { enterRoomCode && <TextInput style={styles.input} value={roomCode} onChangeText={(text) => setRoomCode(text)} placeholder='enter your room code...' /> }
       <MenuButton handlePress={() => router.push('/rules')} title='Rules' />
     </SafeAreaView>

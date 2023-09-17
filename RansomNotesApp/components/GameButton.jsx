@@ -1,13 +1,13 @@
 import React from 'react';
-import { StyleSheet, Pressable } from 'react-native';
+import { StyleSheet, TouchableOpacity } from 'react-native';
 import { Text, View, SafeAreaView } from '../components/Themed';
 
 export default function GameButton({title, handlePress}) {
   return (
     <View style={styles.container}>
-      <Pressable onPress={handlePress}>
+      <TouchableOpacity onPress={handlePress}>
         <Text>{ title }</Text>
-      </Pressable>
+      </TouchableOpacity>
     </View>
   );
 };

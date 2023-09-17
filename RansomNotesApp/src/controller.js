@@ -35,12 +35,14 @@ const joinRoom = async (req, res) => {
     };
     const countPlayers = 'SELECT COUNT(*) FROM players WHERE room_id = $1;'
     const numPlayers = await pool.query(countPlayers, [room]);
+    console.log('Number of players: ', numPlayers);
     if (numPlayers > 5) {
-      res.send('Room full - please start a new game');
+      res.send('FULL');
     }
+    console.log('Server response object: ', responseObj);
     res.send(responseObj);
   } catch (err) {
-    res.send('Please enter a valid room code');
+    res.send('INVALID');
     console.error(err);
   }
 };
@@ -77,7 +79,7 @@ const startGame = async (req, res) => {
   const room = req.body.room_id;
   const getRandPrompt = `SELECT prompt_id FROM prompts WHERE prompt_id NOT IN (SELECT prompt_id FROM room_prompts WHERE room_id = $1) ORDER BY RANDOM() LIMIT 1;`;
   const updateCurrentPrompt = 'UPDATE rooms SET current_prompt = $1 WHERE room_id = $2;';
-  const addToRoomPrompts = 'INSERT INTO room_prompts (prompt_id) VALUES($1) WHERE room_id = $2;';
+  const addToRoomPrompts = 'INSERT INTO room_prompts (prompt_id, room_id) VALUES($1, $2);';
   const startRound = 'UPDATE rooms SET current_round = 1 WHERE room_id = $1;';
 
   try {
