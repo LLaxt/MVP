@@ -11,7 +11,7 @@ import MagnetText from '../components/MagnetText';
 export default function FinalWinner() {
   const router = useRouter();
 
-  const testPlayers = ['Julien: 1', 'Matthew: 2', 'Kevin: 3', 'Rachel: 4', 'Nat: 4', 'Lauren: 5'];
+  const testPlayers = ['Julian: 1', 'Matthew: 2', 'Kevin: 3', 'Rachel: 4', 'Nat: 4', 'Lauren: 5'];
   const playerColors = ['#ff9b94', '#ffda94', '#dfff94', '#94efff', '#949fff', '#e894ff'];
 
   const playerList = testPlayers.map((player, index) => {

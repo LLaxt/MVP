@@ -29,7 +29,7 @@ export default function TurnWinner() {
       { player_id: 2, word_id: 4, word: '!', x: 250, y: 100 }
     ]},
     { player_id: 2001,
-      username: 'Julien',
+      username: 'Julian',
       words: [{ player_id: 4, word_id: 1, word: 'a', x: 15, y: 15 },
         { player_id: 4, word_id: 2, word: 'really', x: 35, y: 35 },
         { player_id: 4, word_id: 3, word: 'funny', x: 110, y: 65 },
