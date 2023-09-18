@@ -11,7 +11,7 @@ import MagnetText from '../components/MagnetText';
 export default function FinalWinner() {
   const router = useRouter();
 
-  const testPlayers = ['Julien: 1', 'Matthew: 2', 'Kevin: 3', 'Rachel: 4', 'Nat: 4', 'Lauren: 5'];
+  const testPlayers = ['Julian: 1', 'Matthew: 2', 'Kevin: 3', 'Rachel: 4', 'Nat: 4', 'Lauren: 5'];
   const playerColors = ['#ff9b94', '#ffda94', '#dfff94', '#94efff', '#949fff', '#e894ff'];
 
   const playerList = testPlayers.map((player, index) => {
@@ -38,11 +38,11 @@ export default function FinalWinner() {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.list}>
-      <Title text='Final Scores:' />
+      <Title text='Final Scores:' extraStyles={styles.title} />
         { playerList }
       </View>
       <View style={styles.footer}>
-        <GameButton handlePress={() => router.push('/')} title="New Game" />
+        <GameButton handlePress={() => router.push('/')} title="Main Menu" />
       </View>
     </SafeAreaView>
   );
@@ -53,6 +53,10 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  title: {
+    fontSize: 24,
+    marginBottom: 10,
   },
   list: {
     flex: 5,

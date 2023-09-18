@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { StyleSheet, Dimensions } from 'react-native';
 import Draggable from 'react-native-draggable';
 import { Text, View, SafeAreaView } from '../components/Themed';

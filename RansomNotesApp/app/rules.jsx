@@ -14,7 +14,7 @@ export default function IndexScreen() {
       <Title text='Rules:' />
       <ScrollView>
         <Text style={styles.text}>
-          When a prompt is revealed, use your word cloud to create the best response, placing magnets inside the black play card area. You have until the timer goes off to finish your response. Remember, the more creative, absurd, and horrible the response, the better! When done, click submit. If the timer goes off before you are finished, any words inside the play card will be submitted.{"\n\n"}
+          When a prompt is revealed, use your word cloud to create the best response, placing magnets FULLY INSIDE the black play card area. You have until the timer goes off to finish your response. Remember, the more creative, absurd, and horrible the response, the better! When done, click submit. If the timer goes off before you are finished, any words inside the play card will be submitted.{"\n\n"}
 
           Once all players are done, all plays will be revealed. Each player takes turns reading their own horrendous sentence creation aloud, starting with the person that finished last.{"\n\n"}
 

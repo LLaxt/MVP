@@ -28,7 +28,7 @@ export function Text(props: TextProps) {
   //removing darkmode for now
   //const color = useThemeColor({ light: lightColor, dark: darkColor }, 'text');
   const color = useThemeColor({ light: lightColor }, 'text');
-  return <DefaultText style={[{ color, fontFamily: "CourierPrime", fontSize: 16, }, style]} {...otherProps} />;
+  return <DefaultText style={[{ color, fontFamily: "CourierPrime", fontSize: 17, }, style]} {...otherProps} />;
 }
 
 export function View(props: ViewProps) {

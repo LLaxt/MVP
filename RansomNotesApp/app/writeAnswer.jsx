@@ -1,55 +1,114 @@
 import { StyleSheet, ScrollView, Platform } from 'react-native';
-import { useState } from 'react';
+import client from '../functions/client';
+import { useState, useEffect, useContext, useRef } from 'react';
 import { Link, useRouter } from 'expo-router';
 import { Text, View, SafeAreaView } from '../components/Themed';
 import Title from '../components/Title';
 import WordList from '../components/WordList';
 import GameButton from '../components/GameButton';
+import GameContext from '../functions/GameContext';
+import { useIsFocused } from "@react-navigation/native";
 
-
+//save prompt in context
 export default function IndexScreen() {
   const router = useRouter();
+  const { gameData, setGameData } = useContext(GameContext);
   const [time, setTime] = useState(60);
   const [cardX, setCardX] = useState(0);
   const [cardY, setCardY] = useState(0);
   const [cardHeight, setCardHeight] = useState(0);
   const [cardWidth, setCardWidth] = useState(0);
-  const [response, setResponse] = useState({ player: 1 });
+  const [words, setWords] = useState([]);
+  const [response, setResponse] = useState({});
+  const testPrompt = 'Alert someone that you are slowly sinking in quicksand';
+  const fetched = useRef(false)
+  const isFocused = useIsFocused();
 
-  const testPrompt = 'Alert someone that you are slowly sinking in quicksand'
-  const testWords = ['hello', 'hi', 'how', 'are', 'you', '?', 'games', 'are', 'fun', '!', 'hello', 'hi', 'how', 'are', 'you', '?', 'games', 'are', 'fun', '!', 'Alphabetical', 'here', 'are', 'some', 'enormously', 'looooooong', 'words', 'more', 'hello', 'hi', 'how', 'are', 'you', '?', 'games', 'are', 'fun', '!', 'hello', 'hi', 'how', 'are', 'you', '?', 'games', 'are', 'fun', '!', 'Alphabetical', 'here', 'are', 'some', 'enormously', 'looooooong', 'weird', 'testing', 'hello', 'additional', 'another', 'every'];
+  useEffect(() => {
+    const checkRound = async () => {
+      try {
+        const roundData = await client.get('/game/getRound', {
+          params: {room_id: gameData.room_id,}
+        });
+        const { current_round, rounds } = roundData.data;
+        setGameData({
+          ...gameData,
+          current_round,
+          rounds,
+        })
+      } catch (err) {
+        console.error(err);
+      }
+    }
+    checkRound();
+  }, [isFocused]);
 
-  // const submitCard = async () => {
-  // logic for submitting words within play card
-  //   router.push('/viewAnswers');
-  // };
-  const checkPosition = (word, x, y, target) => {
-    //ADD word.ID once it exists
-    //if within bounds, add to response, if not, if it's in the response, remove it
-    console.log('Target: ', target);
-    if ((y < cardY + cardHeight) && ( y > cardY && x > cardX && x < cardX + cardWidth)) {
+  useEffect(() => {
+    if (fetched.current) {
+      return;
+    }
+    const fetchWordsAndPrompt = async () => {
+      try {
+        setWords([]);
+        setResponse([]);
+        const newWords = await client.get('/game/getWords', {
+          params: {
+            room_id: gameData.room_id,
+            player_id: gameData.player_id
+          }
+        });
+        const newPrompt = await client.get('/game/getPrompt', {
+          params: { room_id: gameData.room_id }
+        })
+        setGameData({
+          ...gameData,
+          prompt: newPrompt.data,
+        })
+        setWords(newWords.data);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    fetched.current = true;
+    fetchWordsAndPrompt();
+  },[gameData.current_round]);
+
+  const checkPosition = (word, x, y, word_id) => {
+    if ((y < cardY + cardHeight - 20) && ( y > cardY && x > cardX && x < cardX + cardWidth)) {
       setResponse((prevResponse) => {
         return {
           ...prevResponse,
-          [target]: {
+          [word_id]: {
             word: word,
             x: x - cardX,
             y: y - cardY,
         }}
       });
-    } else if (response[target]) {
-      //if ((y > cardY + cardHeight) ||  y < cardY || x > cardX || x < cardX + cardWidth) {
-        const newResponse = {...response};
-        delete newResponse[target];
-        setResponse(newResponse);
-      //}
+    } else if (response[word_id]) {
+      const newResponse = {...response};
+      delete newResponse[word_id];
+      setResponse(newResponse);
     }
-    console.log('Response: ', response);
+  };
+
+  const submitCard = async () => {
+    const submission = {
+      player_id: gameData.player_id,
+      room_id: gameData.room_id,
+      submission: response,
+    }
+    try {
+      await client.post('/game/submitResponse', submission);
+      fetched.current = false;
+      router.push('/viewAnswers');
+    } catch (err) {
+      console.error(err)
+    }
   };
 
   return (
     <SafeAreaView style={styles.container} >
-      <Text style={styles.text}>{ testPrompt }</Text>
+      <Text style={styles.prompt}>{ gameData.prompt }</Text>
       <View
         style={styles.shadow}
         onLayout={({nativeEvent}) => {
@@ -59,13 +118,12 @@ export default function IndexScreen() {
           setCardY(nativeEvent.layout.y);
         }}
       >
-        <View style={styles.playCard} /></View>
-      <WordList words={testWords} checkPosition={checkPosition}/>
+      <View style={styles.playCard} /></View>
+      <WordList words={words} checkPosition={checkPosition}/>
       <View style={styles.footer}>
         <GameButton handlePress={() => {}} title={':' + time} />
-        <GameButton handlePress={() => router.push('/viewAnswers')} title='Submit Response' />
+        <GameButton handlePress={submitCard} title='Submit Response' />
         <GameButton handlePress={() => {}} title='Swap' />
-        <GameButton handlePress={() => router.push('/')} title='Main Menu' />
       </View>
     </SafeAreaView>
   );
@@ -76,15 +134,16 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
   },
-  text: {
+  prompt: {
     textAlign: 'center',
-    marginTop: 10,
-    fontSize: 18,
+    paddingTop: Platform.OS === 'ios' ? 5 : 40,
+    marginHorizontal: 3,
+    fontSize: 16,
   },
   playCard: {
     flex: 1,
     backgroundColor: 'black',
-    margin: 5,
+    marginHorizontal: 5,
     marginTop: 5,
     borderRadius: 10,
     shadowColor: 'white',
@@ -94,6 +153,7 @@ const styles = StyleSheet.create({
   },
   shadow: {
     height: 180,
+    width: 333,
     backgroundColor: 'black',
     margin: 30,
     marginTop: 10,
@@ -103,10 +163,11 @@ const styles = StyleSheet.create({
   footer: {
     position: 'fixed',
     bottom: 0,
-    flex: .4,
-    justifyContent: 'center',
+    flex: .3,
+    justifyContent: 'space-evenly',
     alignItems: 'center',
-    paddingBottom: 5,
     flexDirection: 'row',
   }
 });
+
+  //const testWords = [{ word: 'here', id: 1}, { word: 'are', id: 12}, { word: 'ground', id: 21}, { word: 'and', id: 122}, { word: 'where', id: 14532}, { word: 'move', id: 133}, { word: 'hungry', id: 14}, { word: 'why', id: 441}, { word: 'a', id: 144}, { word: 'help', id: 31}, { word: 'didn\'t', id: 32}, { word: 'can', id: 33}, { word: 'dog', id: 34}, { word: 'try', id: 35}, { word: 'old', id: 36}, { word: 'night', id: 37}, { word: 'moon', id: 38}, { word: 'hand', id: 39}, { word: 'main', id: 40}, { word: 'there', id: 42}, { word: 'candy', id: 43}, { word: 'automobile', id: 44}, { word: 'the', id: 45}, { word: 'lift', id: 46}];

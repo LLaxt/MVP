@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native';
 import { Text, View, SafeAreaView } from '../components/Themed';
 
 export default function MagnetText({ text, extraStyles = {} }) {
-  const randRotation = (Math.random() * 3) * (Math.random() < 0.5 ? -1 : 1);
+  const randRotation = (Math.random() * 4) * (Math.random() < 0.5 ? -1 : 1);
   return (
     <View style={[styles.container, { transform: [{ rotate: `${randRotation}deg`}]}, extraStyles]}>
       <Text style={extraStyles} >{ text }</Text>

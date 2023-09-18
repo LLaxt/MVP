@@ -1,24 +1,21 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
 import FrozenWordMagnet from './FrozenWordMagnet';
 import { Text, View, SafeAreaView } from '../components/Themed';
 
 
 
-export default function FrozenCard({ staticWords, handleClick }) {
-  const wordList = [];
-  for (let key in staticWords.words) {
-    wordList.push(
+export default function FrozenCard({ staticWords, player, handleClick = () => {} }) {
+  const wordList = staticWords.map((magnet) =>
     <FrozenWordMagnet
-      word={staticWords.words[key].word}
-      key={key}
-      x={staticWords.words[key].x}
-      y={staticWords.words[key].y} />
-    );
-  }
-   //
+      word={magnet.word}
+      key={magnet.word_id}
+      x={magnet.x - 10}
+      y={magnet.y - 10} />
+  );
+
   return (
-    <TouchableOpacity onPress={() => handleClick(staticWords.player)}>
+    <TouchableOpacity onPress={() => handleClick(player)}>
       <View style={styles.shadow} >
         <View style={styles.playCard}>
           { wordList }
@@ -43,6 +40,7 @@ const styles = StyleSheet.create({
   },
   shadow: {
     height: 180,
+    width: 333,
     backgroundColor: 'black',
     margin: 30,
     marginTop: 10,
