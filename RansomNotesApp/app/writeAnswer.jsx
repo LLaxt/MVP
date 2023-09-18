@@ -28,21 +28,29 @@ export default function IndexScreen() {
     // if (fetched.current) {
     //   return;
     // }
-    const fetchWords = async () => {
+    const fetchWordsAndPrompt = async () => {
       try {
+        setWords([]);
         const newWords = await client.get('/game/getWords', {
           params: {
             room_id: gameData.room_id,
             player_id: gameData.player_id
           }
         });
+        const newPrompt = await client.get('/game/getPrompt', {
+          params: { room_id: gameData.room_id }
+        })
+        setGameData({
+          ...gameData,
+          prompt: newPrompt.data,
+        })
         setWords(newWords.data);
       } catch (err) {
         console.error(err);
       }
     };
     // fetched.current = true;
-    fetchWords();
+    fetchWordsAndPrompt();
   },[gameData.current_round]);
 
   const checkPosition = (word, x, y, word_id) => {
@@ -80,7 +88,7 @@ export default function IndexScreen() {
 
   return (
     <SafeAreaView style={styles.container} >
-      <Text style={styles.prompt}>{ testPrompt }</Text>
+      <Text style={styles.prompt}>{ gameData.prompt }</Text>
       <View
         style={styles.shadow}
         onLayout={({nativeEvent}) => {
@@ -94,9 +102,8 @@ export default function IndexScreen() {
       <WordList words={words} checkPosition={checkPosition}/>
       <View style={styles.footer}>
         <GameButton handlePress={() => {}} title={':' + time} />
-        <GameButton handlePress={() => {}} title='Swap' />
         <GameButton handlePress={submitCard} title='Submit Response' />
-        <GameButton handlePress={() => router.push('/')} title='Main Menu' />
+        <GameButton handlePress={() => {}} title='Swap' />
       </View>
     </SafeAreaView>
   );
@@ -109,13 +116,14 @@ const styles = StyleSheet.create({
   },
   prompt: {
     textAlign: 'center',
-    paddingTop: Platform.OS === 'ios' ? 10 : 40,
+    paddingTop: Platform.OS === 'ios' ? 5 : 40,
+    marginHorizontal: 3,
     fontSize: 18,
   },
   playCard: {
     flex: 1,
     backgroundColor: 'black',
-    margin: 5,
+    marginHorizontal: 5,
     marginTop: 5,
     borderRadius: 10,
     shadowColor: 'white',
@@ -135,10 +143,9 @@ const styles = StyleSheet.create({
   footer: {
     position: 'fixed',
     bottom: 0,
-    flex: .4,
-    justifyContent: 'space-around',
+    flex: .3,
+    justifyContent: 'space-evenly',
     alignItems: 'center',
-    paddingBottom: 5,
     flexDirection: 'row',
   }
 });

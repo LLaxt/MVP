@@ -70,7 +70,7 @@ const getPrompt = async (req, res) => {
   const getNewPrompt = 'SELECT prompt FROM prompts LEFT JOIN rooms ON rooms.current_prompt = prompts.prompt_id WHERE room_id = $1;';
   try {
     const prompt = await pool.query(getNewPrompt, [room]);
-    res.send(prompt.rows[0].prompt_id);
+    res.send(prompt.rows[0].prompt);
   } catch (err) {
     console.error(err);
   }
@@ -109,7 +109,7 @@ const setNextRound = async (req, res) => {
 const getWords = async (req, res) => {
   const room = req.query.room_id;
   const player = parseInt(req.query.player_id);
-  const deleteUsedWords = `DELETE FROM room_words WHERE room_id = $1 AND player_id = $2 AND submitted = true;`;
+  const deleteUsedWords = `DELETE FROM room_words WHERE room_id = $1 AND player_id = $2;`;
   const deleteVotes = `UPDATE players SET current_votes = 0 WHERE player_id = $1;`;
   const getNewWords = `SELECT word_id, word FROM words WHERE word_id NOT IN (SELECT word_id FROM room_words WHERE room_id = $1) ORDER BY RANDOM() LIMIT 60;`;
   const addWordsToRoom = `INSERT INTO room_words (room_id, player_id, word_id) VALUES ($1, $2, $3);`;

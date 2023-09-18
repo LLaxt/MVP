@@ -63,6 +63,9 @@ export default function viewAnswers() {
           await client.post('/game/setNextRound', {
             room_id: gameData.room_id
           })
+          await client.post('/game/setPrompt', {
+            room_id: gameData.room_id
+          })
         }
 
         //TEST DATA - REMOVE IN PROD////
