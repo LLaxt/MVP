@@ -26,15 +26,14 @@ export default function WaitingRoom() {
   const getPlayers = async () => {
     try {
       const playerList = await client.get('/game/getPlayers', {
-        query: { room_id: gameData.room_id }
+        params: { room_id: gameData.room_id }
       })
       setPlayers(playerList.data.players);
-
-      //maybe playerlist.current_round
       if (playerList.data.current_round === 1) {
         setGameData({
           ...gameData,
           current_round: 1,
+          rounds: playerList.data.rounds,
         });
         router.push('/writeAnswer');
       }

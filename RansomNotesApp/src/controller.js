@@ -77,14 +77,15 @@ const getPrompt = async (req, res) => {
 };
 
 const getPlayers = async (req, res) => {
-  const room = req.body.room_id;
+  const room = req.query.room_id;
   const returnPlayers = 'SELECT username, player_id FROM players where room_id = $1;';
-  const checkStart = 'SELECT current_round FROM rooms where room_id=$1;';
+  const checkStart = 'SELECT current_round, rounds FROM rooms WHERE room_id = $1;';
   try {
     const players = await pool.query(returnPlayers, [room]);
     const round = await pool.query(checkStart, [room]);
     const returnObj = {
-      current_round: round.rows[0],
+      current_round: round.rows[0].current_round,
+      rounds: round.rows[0].rounds,
       players: players.rows,
     }
     res.send(returnObj);
