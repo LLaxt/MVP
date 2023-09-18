@@ -17,22 +17,24 @@ export default function WaitingRoom() {
   const [players, setPlayers] = useState([]);
   const { gameData, setGameData } = useContext(GameContext);
 
-  const testPlayers = ['Lauren', 'Nat', 'Kevin', 'Rachel', 'Matthew'];// , 'Julien'
+  const testPlayers = ['Lauren', 'Nat', 'Kevin', 'Rachel', 'Matthew'];//, 'Julien'
   const playerColors = ['#ff9b94', '#ffda94', '#dfff94', '#94efff', '#949fff', '#e894ff'];
 
   const testPlayerList = testPlayers.map((player, index) => <MagnetText text={player} key={index} extraStyles={{ backgroundColor: playerColors[index] }}/>);
 
+  //USE ACTUAL DATA IN PROD - need set getplayers to repeat check on a set timeout
   const getPlayers = async () => {
     try {
       const playerList = await client.get('/game/getPlayers', {
         query: { room_id: gameData.room_id }
       })
-      console.log('Playerlist Frontend: ', playerList.data);
       setPlayers(playerList.data.players);
-      if (playerList.data.round === 1) {
+
+      //maybe playerlist.current_round
+      if (playerList.data.current_round === 1) {
         setGameData({
           ...gameData,
-          round: 1,
+          current_round: 1,
         });
         router.push('/writeAnswer');
       }
@@ -41,17 +43,11 @@ export default function WaitingRoom() {
     };
   };
 
-
-
-  // while (gameData.round === 0) {
-  //   setTimeout(getPlayers, 1000);
-  // }
-
   const startGame = async () => {
     try {
       setGameData({
         ...gameData,
-        round: 1,
+        current_round: 1,
       });
       await client.post('/game/setNextRound', {
         room_id: gameData.room_id

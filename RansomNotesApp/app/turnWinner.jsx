@@ -45,21 +45,23 @@ export default function TurnWinner() {
           params: { room_id: gameData.room_id }
         });
         setWinners(winnerData.data.concat(testWinners));
-        const roundData = await client.get('/game/getRound', {
-          params: {room_id: gameData.room_id,}
-        });
-        const current_round = roundData.data === 'END' ? 'END' : roundData.data.current_round;
-        setGameData({
-          ...gameData,
-          current_round,
-        })
       } catch (err) {
         console.error(err);
     }};
     fetchWinners();
   }, []);
 
-
+  const goToNextRound = async () => {
+    if (gameData.host === true && gameData.current_round < gameData.rounds) {
+      await client.post('/game/setNextRound', {
+        room_id: gameData.room_id
+      })
+      await client.post('/game/setPrompt', {
+        room_id: gameData.room_id
+      })
+    }
+    router.push('/writeAnswer')
+  }
 
   const winnerList = winners.map((winner, index) => {
     return (
@@ -82,15 +84,14 @@ export default function TurnWinner() {
   return (
     <SafeAreaView style={styles.container}>
       <Title text={ winners.length > 1 ? 'Round Winners: ' : 'Round Winner:' }/>
-      <Text style={styles.prompt}>{ testPrompt }</Text>
+      <Text style={styles.prompt}>{ gameData.prompt }</Text>
       <ScrollView style={styles.scroll}>
         { winnerList }
       </ScrollView>
       <View style={styles.footer}>
-        {
-          gameData.current_round === 'END' ?
+        { gameData.current_round === gameData.rounds ?
           <GameButton handlePress={() => router.push('/finalWinner')} title="See Final Scores" /> :
-           <GameButton handlePress={() => router.push('/writeAnswer')} title="Next round" />
+           <GameButton handlePress={goToNextRound} title="Next round" />
         }
         <GameButton handlePress={() => router.push('/')} title="Main Menu" />
       </View>

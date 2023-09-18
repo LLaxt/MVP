@@ -84,7 +84,7 @@ const getPlayers = async (req, res) => {
     const players = await pool.query(returnPlayers, [room]);
     const round = await pool.query(checkStart, [room]);
     const returnObj = {
-      round: round.rows[0],
+      current_round: round.rows[0],
       players: players.rows,
     }
     res.send(returnObj);
@@ -112,13 +112,13 @@ const getWords = async (req, res) => {
   const deleteUsedWords = `DELETE FROM room_words WHERE room_id = $1 AND player_id = $2;`;
   const deleteVotes = `UPDATE players SET current_votes = 0 WHERE player_id = $1;`;
   const getNewWords = `SELECT word_id, word FROM words WHERE word_id NOT IN (SELECT word_id FROM room_words WHERE room_id = $1) ORDER BY RANDOM() LIMIT 60;`;
-  const addWordsToRoom = `INSERT INTO room_words (room_id, player_id, word_id) VALUES ($1, $2, $3);`;
+  const addWordsToRoom = `INSERT INTO room_words (room_id, player_id, word_id, submitted) VALUES ($1, $2, $3, $4);`;
   try {
     await pool.query(deleteUsedWords, [room, player]);
     await pool.query(deleteVotes, [player]);
     const words = await pool.query(getNewWords, [room]);
     for (let i = 0; i < words.rows.length; i++) {
-      await pool.query(addWordsToRoom, [room, player, words.rows[i].word_id]);
+      await pool.query(addWordsToRoom, [room, player, words.rows[i].word_id, false]);
     }
     res.send(words.rows);
   } catch (err) {
@@ -174,12 +174,8 @@ const getRound = async (req, res) => {
   try {
     const roundData = await pool.query(checkMax, [room]);
     const { current_round, rounds } = roundData.rows[0];
-    if ( current_round > rounds) {
-      res.send('END');
-    } else {
-      const returnObj = { current_round };
-      res.send(returnObj);
-    }
+    const returnObj = { current_round, rounds };
+    res.send(returnObj);
   } catch(err) {
     console.error(err);
   }

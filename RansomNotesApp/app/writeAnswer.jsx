@@ -7,7 +7,7 @@ import Title from '../components/Title';
 import WordList from '../components/WordList';
 import GameButton from '../components/GameButton';
 import GameContext from '../functions/GameContext';
-
+import { useIsFocused } from "@react-navigation/native";
 
 //save prompt in context
 export default function IndexScreen() {
@@ -21,16 +21,36 @@ export default function IndexScreen() {
   const [words, setWords] = useState([]);
   const [response, setResponse] = useState({});
   const testPrompt = 'Alert someone that you are slowly sinking in quicksand';
-  //const fetched = useRef(false)
+  const fetched = useRef(false)
+  const isFocused = useIsFocused();
 
-  //useref to stop expo go rerendering
   useEffect(() => {
-    // if (fetched.current) {
-    //   return;
-    // }
+    const checkRound = async () => {
+      try {
+        const roundData = await client.get('/game/getRound', {
+          params: {room_id: gameData.room_id,}
+        });
+        const { current_round, rounds } = roundData.data;
+        setGameData({
+          ...gameData,
+          current_round,
+          rounds,
+        })
+      } catch (err) {
+        console.error(err);
+      }
+    }
+    checkRound();
+  }, [isFocused]);
+
+  useEffect(() => {
+    if (fetched.current) {
+      return;
+    }
     const fetchWordsAndPrompt = async () => {
       try {
         setWords([]);
+        setResponse([]);
         const newWords = await client.get('/game/getWords', {
           params: {
             room_id: gameData.room_id,
@@ -49,7 +69,7 @@ export default function IndexScreen() {
         console.error(err);
       }
     };
-    // fetched.current = true;
+    fetched.current = true;
     fetchWordsAndPrompt();
   },[gameData.current_round]);
 
@@ -79,7 +99,7 @@ export default function IndexScreen() {
     }
     try {
       await client.post('/game/submitResponse', submission);
-      //fetched.current = false;
+      fetched.current = false;
       router.push('/viewAnswers');
     } catch (err) {
       console.error(err)
@@ -118,7 +138,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     paddingTop: Platform.OS === 'ios' ? 5 : 40,
     marginHorizontal: 3,
-    fontSize: 18,
+    fontSize: 16,
   },
   playCard: {
     flex: 1,

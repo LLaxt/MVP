@@ -74,7 +74,7 @@ export default function IndexScreen() {
           return;
         };
         const { room_id, player_id } = data;
-        const currentPlayerData = { room_id, player_id, username: name, round: 0, prompt: '' };
+        const currentPlayerData = { room_id, player_id, username: name, current_round: 0, prompt: '', rounds: 100 };
         setGameData(currentPlayerData);
         setEnterRoomCode(false);
         setRoomCode('');

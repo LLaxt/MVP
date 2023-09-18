@@ -1,4 +1,3 @@
-//FREEZE THE PROMPT AND MAKE ANSWERS SCROLLABLE
 import { StyleSheet, ScrollView, Platform } from 'react-native';
 import { useState, useEffect, useContext } from 'react';
 import { Link, useRouter } from 'expo-router';
@@ -59,15 +58,6 @@ export default function viewAnswers() {
             playerCards[data[i].player_id].push(magnet);
           }
         }
-        if (gameData.host === true) {
-          await client.post('/game/setNextRound', {
-            room_id: gameData.room_id
-          })
-          await client.post('/game/setPrompt', {
-            room_id: gameData.room_id
-          })
-        }
-
         //TEST DATA - REMOVE IN PROD////
         for (let i = 0; i < testAnswers.length; i++) {
           let magnet = { word_id: testAnswers[i].word_id, word: testAnswers[i].word, x: testAnswers[i].x, y: testAnswers[i].y,};
@@ -104,7 +94,7 @@ export default function viewAnswers() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.prompt}>{ testPrompt }</Text>
+      <Text style={styles.prompt}>{ gameData.prompt }</Text>
       <ScrollView style={styles.scroll}>
         {finalCards}
       </ScrollView>
