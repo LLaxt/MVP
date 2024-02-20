@@ -16,7 +16,7 @@ export default function viewAnswers() {
   const [voting, setVoting] = useState(false);
   const testPrompt = 'Alert someone that you are slowly sinking in quicksand';
 
-  let testAnswers = [
+  const testAnswers = [
       { player_id: 2002, word_id: 1, word: 'a', x: 65, y: 55 },
       { player_id: 2002, word_id: 2, word: 'funny', x: 100, y: 55 },
       { player_id: 2002, word_id: 3, word: 'answer', x: 170, y: 70 },
@@ -48,8 +48,8 @@ export default function viewAnswers() {
             room_id: gameData.room_id
           }
         });
-        let playerCards = {};
-        let data = responseData.data;
+        const playerCards = {};
+        const data = responseData.data;
         for (let i = 0; i < data.length; i++) {
           let magnet = { word_id: data[i].word_id, word: data[i].word, x: data[i].x, y: data[i].y,};
           if ( playerCards[data[i].player_id] === undefined ) {

@@ -134,10 +134,10 @@ const submitResponse = async (req, res) => {
   //const word_ids = Object.keys(req.body.submission);
   const player = req.body.player_id;
   const room = req.body.room_id;
-  const submit = 'UPDATE room_words SET x = $1, y = $2, submitted = $3 WHERE room_id = $4 and player_id = $5 and word_id = $6;';
+  const submit = 'UPDATE room_words SET x = $1, y = $2, angle = $3, submitted = $4 WHERE room_id = $5 and player_id = $6 and word_id = $7;';
   try {
     for (let key in submission) {
-      const values = [submission[key].x, submission[key].y, true, room, player, key];
+      const values = [submission[key].x, submission[key].y, submission[key].angle, true, room, player, key];
       await pool.query(submit, values);
     }
   } catch (err) {
@@ -148,7 +148,7 @@ const submitResponse = async (req, res) => {
 
 const getResponses = async (req, res) => {
   const room = req.query.room_id;
-  const responseQuery = 'SELECT player_id, word, room_words.word_id, x, y FROM room_words LEFT JOIN words ON room_words.word_id = words.word_id WHERE room_id = $1 and submitted = true ORDER BY RANDOM();';
+  const responseQuery = 'SELECT player_id, word, room_words.word_id, x, y, angle FROM room_words LEFT JOIN words ON room_words.word_id = words.word_id WHERE room_id = $1 and submitted = true ORDER BY RANDOM();';
   try {
     const responses = await pool.query(responseQuery, [room]);
     res.send(responses.rows);
@@ -185,7 +185,7 @@ const getRound = async (req, res) => {
 const getWinners = async (req, res) => {
   const room = req.query.room_id;
   const getPlayers = 'SELECT player_id, current_votes, username FROM players WHERE room_id = $1;';
-  const getCard = 'SELECT room_words.word_id, word, x, y FROM room_words LEFT JOIN words ON room_words.word_id = words.word_id WHERE room_id = $1 AND player_id = $2 AND submitted = true;';
+  const getCard = 'SELECT room_words.word_id, word, x, y, angle FROM room_words LEFT JOIN words ON room_words.word_id = words.word_id WHERE room_id = $1 AND player_id = $2 AND submitted = true;';
   const addToFinalScore = 'UPDATE players SET score = score + 1 WHERE room_id = $1 AND player_id = $2;';
   const winners = [];
   try {

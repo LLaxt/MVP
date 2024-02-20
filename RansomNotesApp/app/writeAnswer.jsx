@@ -73,7 +73,7 @@ export default function IndexScreen() {
     fetchWordsAndPrompt();
   },[gameData.current_round]);
 
-  const checkPosition = (word, x, y, word_id) => {
+  const checkPosition = (word, x, y, angle, word_id) => {
     if ((y < cardY + cardHeight - 20) && ( y > cardY && x > cardX && x < cardX + cardWidth)) {
       setResponse((prevResponse) => {
         return {
@@ -82,6 +82,7 @@ export default function IndexScreen() {
             word: word,
             x: x - cardX,
             y: y - cardY,
+            angle
         }}
       });
     } else if (response[word_id]) {

@@ -1,10 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
 import Draggable from 'react-native-draggable';
 import { Text, View, SafeAreaView } from './Themed';
+import getRandomAngle from '../functions/getRandomAngle'
+
+
 
 export default function MenuButton({title, handlePress}) {
-  const randRotation = (Math.random() * 3) * (Math.random() < 0.5 ? -1 : 1);
+  const [randRotation, setRandRotation] = useState(getRandomAngle(3));
   return (
     <View style={[styles.container, { transform: [{ rotate: `${randRotation}deg`}]}]}>
       <TouchableOpacity onPress={handlePress}>

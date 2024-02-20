@@ -1,15 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { StyleSheet, Dimensions } from 'react-native';
 import { Text, View, SafeAreaView } from '../components/Themed';
+import getRandomAngle from '../functions/getRandomAngle'
 import Draggable from 'react-native-draggable';
 
 export default function WordMagnet({word, checkPosition}) {
-  const randRotation = (Math.random() * 4) * (Math.random() < 0.5 ? -1 : 1);
+  const [randRotation, setRandRotation] = useState(getRandomAngle(4));
 
   const getPosition = (e) => {
     let x = e.nativeEvent.pageX - e.nativeEvent.locationX;
     let y = e.nativeEvent.pageY - e.nativeEvent.locationY;
-    checkPosition(word.word, x, y, word.word_id);
+    checkPosition(word.word, x, y, randRotation, word.word_id);
   };
 
   return (
