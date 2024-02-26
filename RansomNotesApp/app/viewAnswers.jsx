@@ -17,28 +17,28 @@ export default function viewAnswers() {
   const testPrompt = 'Alert someone that you are slowly sinking in quicksand';
 
   const testAnswers = [
-      { player_id: 2002, word_id: 1, word: 'a', x: 65, y: 55 },
-      { player_id: 2002, word_id: 2, word: 'funny', x: 100, y: 55 },
-      { player_id: 2002, word_id: 3, word: 'answer', x: 170, y: 70 },
-      { player_id: 2002, word_id: 4, word: '!', x: 250, y: 100 },
-      { player_id: 2003, word_id: 1, word: 'another', x: 20, y: 35 },
-      { player_id: 2003, word_id: 2, word: 'funny', x: 100, y: 65 },
-      { player_id: 2003, word_id: 3, word: 'answer', x: 170, y: 70 },
-      { player_id: 2003, word_id: 4, word: '!', x: 250, y: 100 },
-      { player_id: 2004, word_id: 1, word: 'a', x: 15, y: 15 },
-      { player_id: 2004, word_id: 2, word: 'really', x: 35, y: 35 },
-      { player_id: 2004, word_id: 3, word: 'funny', x: 110, y: 65 },
-      { player_id: 2004, word_id: 4, word: 'answer', x: 170, y: 90 },
-      { player_id: 2004, word_id: 5, word: '!', x: 250, y: 100 },
-      { player_id: 2005, word_id: 1, word: 'a', x: 15, y: 55 },
-      { player_id: 2005, word_id: 2, word: 'very', x: 40, y: 55 },
-      { player_id: 2005, word_id: 3, word: 'good', x: 90, y: 65 },
-      { player_id: 2005, word_id: 4, word: 'answer', x: 170, y: 70 },
-      { player_id: 2005, word_id: 5, word: '!', x: 250, y: 100 },
-      { player_id: 2006, word_id: 4, word: 'i', x: 40, y: 40 },
-      { player_id: 2006, word_id: 5, word: 'love', x: 40, y: 80 },
-      { player_id: 2006, word_id: 6, word: '!', x: 180, y: 130 },
-      { player_id: 2006, word_id: 7, word: 'coding', x: 100, y: 100 },];
+      { player_id: 2002, word_id: 1, word: 'a', x: 65, y: 55, angle: 0.1 },
+      { player_id: 2002, word_id: 2, word: 'funny', x: 100, y: 55, angle: -0.1 },
+      { player_id: 2002, word_id: 3, word: 'answer', x: 170, y: 70, angle: 0.1 },
+      { player_id: 2002, word_id: 4, word: '!', x: 250, y: 100, angle: 0.51 },
+      { player_id: 2003, word_id: 1, word: 'another', x: 20, y: 35, angle: 0.1 },
+      { player_id: 2003, word_id: 2, word: 'funny', x: 100, y: 65, angle: -0.51 },
+      { player_id: 2003, word_id: 3, word: 'answer', x: 170, y: 70, angle: 0.51 },
+      { player_id: 2003, word_id: 4, word: '!', x: 250, y: 100, angle: 0.51 },
+      { player_id: 2004, word_id: 1, word: 'a', x: 15, y: 15, angle: 0.1 },
+      { player_id: 2004, word_id: 2, word: 'really', x: 35, y: 35, angle: -0.51 },
+      { player_id: 2004, word_id: 3, word: 'funny', x: 110, y: 65, angle: 0.1 },
+      { player_id: 2004, word_id: 4, word: 'answer', x: 170, y: 90, angle: 0.1 },
+      { player_id: 2004, word_id: 5, word: '!', x: 250, y: 100, angle: 0.51 },
+      { player_id: 2005, word_id: 1, word: 'a', x: 15, y: 55, angle: 0.2 },
+      { player_id: 2005, word_id: 2, word: 'very', x: 40, y: 55, angle: -0.1 },
+      { player_id: 2005, word_id: 3, word: 'good', x: 100, y: 65, angle: -0.1 },
+      { player_id: 2005, word_id: 4, word: 'answer', x: 170, y: 70, angle: 0.1 },
+      { player_id: 2005, word_id: 5, word: '!', x: 250, y: 100, angle: 0.1 },
+      { player_id: 2006, word_id: 4, word: 'i', x: 40, y: 40, angle: -0.1 },
+      { player_id: 2006, word_id: 5, word: 'love', x: 40, y: 80, angle: 0.1 },
+      { player_id: 2006, word_id: 6, word: '!', x: 180, y: 130, angle: 0.1 },
+      { player_id: 2006, word_id: 7, word: 'coding', x: 100, y: 100, angle: -0.1 },];
 
   useEffect(() => {
     const getAnswers = async () => {
@@ -51,7 +51,7 @@ export default function viewAnswers() {
         const playerCards = {};
         const data = responseData.data;
         for (let i = 0; i < data.length; i++) {
-          let magnet = { word_id: data[i].word_id, word: data[i].word, x: data[i].x, y: data[i].y,};
+          let magnet = { word_id: data[i].word_id, word: data[i].word, x: data[i].x, y: data[i].y, angle: data.angle };
           if ( playerCards[data[i].player_id] === undefined ) {
             playerCards[data[i].player_id] = [magnet];
           } else {
@@ -60,7 +60,7 @@ export default function viewAnswers() {
         }
         //TEST DATA - REMOVE IN PROD////
         for (let i = 0; i < testAnswers.length; i++) {
-          let magnet = { word_id: testAnswers[i].word_id, word: testAnswers[i].word, x: testAnswers[i].x, y: testAnswers[i].y,};
+          let magnet = { word_id: testAnswers[i].word_id, word: testAnswers[i].word, x: testAnswers[i].x, y: testAnswers[i].y, angle: testAnswers[i].angle};
           if ( playerCards[testAnswers[i].player_id] === undefined ) {
             playerCards[testAnswers[i].player_id] = [magnet];
           } else {
@@ -88,9 +88,16 @@ export default function viewAnswers() {
     }
   };
   //DO NOT RENDER CURRENT PLAYER ID CARD IN REAL SETTING
-  const finalCards = Object.keys(responses).map((id) =>
-    <FrozenCard staticWords={responses[id]} key={id} player={id} handleClick={voting ? submitVote : () => {}} />
-  );
+  const finalCards = Object.keys(responses).map((id) => {
+    console.log("response objs", responses)
+    if (id !== gameData.player_id)
+    return (<FrozenCard
+      staticWords={responses[id]}
+      key={id}
+      player={id}
+      handleClick={voting ? submitVote : () => {}}
+    />)
+  });
 
   return (
     <SafeAreaView style={styles.container}>
@@ -109,7 +116,6 @@ export default function viewAnswers() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    //alignItems: 'center',
     justifyContent: 'center',
   },
   prompt: {

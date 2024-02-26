@@ -29,17 +29,18 @@ export default function FrozenCard({ staticWords, player, handleClick = () => {}
 const styles = StyleSheet.create({
   playCard: {
     flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
     backgroundColor: 'black',
     margin: 5,
-    marginTop: 5,
     borderRadius: 10,
     shadowColor: 'white',
     shadowRadius: 5,
     shadowOpacity: 1,
     elevation: 6,
-    position: 'relative'
   },
   shadow: {
+    alignSelf: 'center',
     height: 180,
     width: 333,
     backgroundColor: 'black',
@@ -49,3 +50,4 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
 });
+

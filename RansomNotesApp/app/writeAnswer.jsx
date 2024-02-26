@@ -143,10 +143,10 @@ const styles = StyleSheet.create({
   },
   playCard: {
     flex: 1,
-    alignSelf: 'center',
+    justifyContent: 'center',
+    alignItems: 'center',
     backgroundColor: 'black',
-    marginHorizontal: 5,
-    marginTop: 5,
+    margin: 5,
     borderRadius: 10,
     shadowColor: 'white',
     shadowRadius: 5,
@@ -154,6 +154,7 @@ const styles = StyleSheet.create({
     elevation: 6,
   },
   shadow: {
+    alignSelf: 'center',
     height: 180,
     width: 333,
     backgroundColor: 'black',
