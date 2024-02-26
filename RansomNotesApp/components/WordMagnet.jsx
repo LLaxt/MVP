@@ -5,7 +5,7 @@ import getRandomAngle from '../utils/getRandomAngle'
 import Draggable from 'react-native-draggable';
 
 export default function WordMagnet({word, checkPosition}) {
-  const [randRotation, setRandRotation] = useState(getRandomAngle(4));
+  const [randRotation] = useState(getRandomAngle(4));
 
   const getPosition = (e) => {
     let x = e.nativeEvent.pageX - e.nativeEvent.locationX;

@@ -7,7 +7,8 @@ import getRandomAngle from '../utils/getRandomAngle'
 
 
 export default function MenuButton({title, handlePress}) {
-  const [randRotation, setRandRotation] = useState(getRandomAngle(3));
+  const [randRotation] = useState(getRandomAngle(3));
+
   return (
     <View style={[styles.container, { transform: [{ rotate: `${randRotation}deg`}]}]}>
       <TouchableOpacity onPress={handlePress}>

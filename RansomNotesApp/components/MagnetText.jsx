@@ -4,7 +4,7 @@ import { Text, View, SafeAreaView } from '../components/Themed';
 import getRandomAngle from '../utils/getRandomAngle'
 
 export default function MagnetText({ text, extraStyles = {} }) {
-  const [randRotation, setRandRotation] = useState(getRandomAngle(4));
+  const [randRotation] = useState(getRandomAngle(4));
   return (
     <View style={[styles.container, { transform: [{ rotate: `${randRotation}deg`}]}, extraStyles]}>
       <Text style={extraStyles} >{ text }</Text>
