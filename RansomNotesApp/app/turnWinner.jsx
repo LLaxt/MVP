@@ -8,8 +8,8 @@ import Title from '../components/Title';
 import GameButton from '../components/GameButton';
 import MagnetText from '../components/MagnetText';
 import FrozenCard from '../components/FrozenCard';
-import GameContext from '../functions/GameContext';
-import client from '../functions/client';
+import GameContext from '../utils/GameContext';
+import client from '../utils/client';
 
 //CHECK IF CURRENT ROUND = rooms_rounds
 //IF TRUE, NEXT ROUND BUTTON -> VIEW FINAL RESULTS

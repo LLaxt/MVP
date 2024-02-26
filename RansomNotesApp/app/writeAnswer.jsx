@@ -1,12 +1,12 @@
 import { StyleSheet, ScrollView, Platform } from 'react-native';
-import client from '../functions/client';
+import client from '../utils/client';
 import { useState, useEffect, useContext, useRef } from 'react';
 import { Link, useRouter } from 'expo-router';
 import { Text, View, SafeAreaView } from '../components/Themed';
 import Title from '../components/Title';
 import WordList from '../components/WordList';
 import GameButton from '../components/GameButton';
-import GameContext from '../functions/GameContext';
+import GameContext from '../utils/GameContext';
 import { useIsFocused } from "@react-navigation/native";
 
 //save prompt in context

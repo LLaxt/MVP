@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { StyleSheet, Dimensions } from 'react-native';
 import { Text, View, SafeAreaView } from '../components/Themed';
-import getRandomAngle from '../functions/getRandomAngle'
+import getRandomAngle from '../utils/getRandomAngle'
 import Draggable from 'react-native-draggable';
 
 export default function WordMagnet({word, checkPosition}) {

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
 import Draggable from 'react-native-draggable';
 import { Text, View, SafeAreaView } from './Themed';
-import getRandomAngle from '../functions/getRandomAngle'
+import getRandomAngle from '../utils/getRandomAngle'
 
 
 

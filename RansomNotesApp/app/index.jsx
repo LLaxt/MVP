@@ -1,8 +1,8 @@
 import { StyleSheet, Button, TextInput, Alert } from 'react-native';
 import { Link, useRouter } from 'expo-router';
 import { useState, useContext } from 'react';
-import GameContext from '../functions/GameContext';
-import client from '../functions/client'
+import GameContext from '../utils/GameContext';
+import client from '../utils/client'
 
 import EditScreenInfo from '../components/EditScreenInfo';
 import { Text, View, SafeAreaView } from '../components/Themed';

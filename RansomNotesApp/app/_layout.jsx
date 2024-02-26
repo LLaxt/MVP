@@ -4,7 +4,7 @@ import { useFonts } from 'expo-font';
 import { SplashScreen, Stack } from 'expo-router';
 import { useEffect, useContext, useState } from 'react';
 import { useColorScheme } from 'react-native';
-import GameContext from '../functions/GameContext';
+import GameContext from '../utils/GameContext';
 
 export {
   // Catch any errors thrown by the Layout component.

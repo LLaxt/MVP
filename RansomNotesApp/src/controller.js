@@ -1,5 +1,5 @@
 const pool = require('../db/db');
-const generateID = require('../functions/generateRoomID');
+const generateID = require('../utils/generateRoomID');
 
 //TO DO: VALIDATE WHETHER ROOM_ID ALREADY EXISTS
 const createRoom = async (req, res) => {

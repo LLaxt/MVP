@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { StyleSheet } from 'react-native';
 import { Text, View, SafeAreaView } from '../components/Themed';
-import getRandomAngle from '../functions/getRandomAngle'
+import getRandomAngle from '../utils/getRandomAngle'
 
 export default function MagnetText({ text, extraStyles = {} }) {
   const [randRotation, setRandRotation] = useState(getRandomAngle(4));

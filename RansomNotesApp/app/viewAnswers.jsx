@@ -2,10 +2,10 @@ import { StyleSheet, ScrollView, Platform } from 'react-native';
 import { useState, useEffect, useContext } from 'react';
 import { Link, useRouter } from 'expo-router';
 import { Text, View, SafeAreaView } from '../components/Themed';
-import client from '../functions/client';
+import client from '../utils/client';
 import GameButton from '../components/GameButton';
 import FrozenCard from '../components/FrozenCard';
-import GameContext from '../functions/GameContext';
+import GameContext from '../utils/GameContext';
 
 
 //Conditionally render list only if all responses are in
