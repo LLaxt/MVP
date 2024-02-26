@@ -139,10 +139,11 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     paddingTop: Platform.OS === 'ios' ? 5 : 40,
     marginHorizontal: 3,
-    fontSize: 16,
+    fontSize: 18,
   },
   playCard: {
     flex: 1,
+    alignSelf: 'center',
     backgroundColor: 'black',
     marginHorizontal: 5,
     marginTop: 5,
