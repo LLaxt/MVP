@@ -88,16 +88,14 @@ export default function viewAnswers() {
     }
   };
   //DO NOT RENDER CURRENT PLAYER ID CARD IN REAL SETTING
-  const finalCards = Object.keys(responses).map((id) => {
-    console.log("response objs", responses)
-    if (id !== gameData.player_id)
-    return (<FrozenCard
+  const finalCards = Object.keys(responses).map((id) =>
+    id !== gameData.player_id  && (<FrozenCard
       staticWords={responses[id]}
       key={id}
       player={id}
       handleClick={voting ? submitVote : () => {}}
     />)
-  });
+  );
 
   return (
     <SafeAreaView style={styles.container}>
