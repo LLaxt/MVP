@@ -51,7 +51,7 @@ export default function viewAnswers() {
         const playerCards = {};
         const data = responseData.data;
         for (let i = 0; i < data.length; i++) {
-          let magnet = { word_id: data[i].word_id, word: data[i].word, x: data[i].x, y: data[i].y, angle: data.angle };
+          let magnet = { word_id: data[i].word_id, word: data[i].word, x: data[i].x, y: data[i].y, angle: data[i].angle };
           if ( playerCards[data[i].player_id] === undefined ) {
             playerCards[data[i].player_id] = [magnet];
           } else {
