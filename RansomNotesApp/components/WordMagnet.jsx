@@ -14,8 +14,8 @@ export default function WordMagnet({word, checkPosition}) {
   };
 
   return (
-    <Draggable style={styles.draggable} onDragRelease={getPosition} >
-      <View style={[styles.magnet, { transform: [{ rotate: `${randRotation}deg`}]}]}  >
+    <Draggable onDragRelease={getPosition}>
+      <View style={[styles.magnet, { transform: [{ rotate: `${randRotation}deg`}]}]}>
         <Text>{ word.word }</Text>
       </View>
     </Draggable>
@@ -31,8 +31,4 @@ const styles = StyleSheet.create({
     position: 'relative',
     display: 'inline-block',
   },
-  draggable: {
-    backgroundColor: 'transparent',
-    alignSelf: 'flex-start',
-  }
 });
